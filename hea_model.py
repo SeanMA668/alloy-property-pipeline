@@ -452,6 +452,11 @@ def write_report(df, top, exp, exp_stats, metrics, importances, checks, d, path,
     if d.mp_structures:
         L.append("- Materials Project ground states: " + ", ".join(
             f"{e} {s['material_id']} ({s['spacegroup']})" for e, s in d.mp_structures.items()))
+        odd = [e for e, s in d.mp_structures.items() if s["spacegroup"] != "Im-3m"]
+        if odd:
+            L.append(f"  - Note: the lowest-energy Materials Project entry for {', '.join(odd)} "
+                     "is not bcc (Im-3m), although the element is bcc experimentally. These "
+                     "structures are recorded for reference only; no feature uses them.")
     L.append("- Binary ΔH_mix: Takeuchi & Inoue, Mater. Trans. 46 (2005) 2817, via matminer.")
     L.append("- Training data: `data/MPEA_dataset.csv`, copied from "
              "github.com/CitrineInformatics/MPEA_dataset (commit d31e251, Apache-2.0).")

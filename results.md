@@ -67,7 +67,9 @@ Feature importances: delta_pct 0.124, dH_mix_kJmol 0.128, VEC 0.385, dS_mix_Jmol
 
 ## Data sources and checks
 
-- Elemental data: pymatgen bundled periodic-table data (Materials Project not queried). Metallic radii (Å): W 1.39, Mo 1.39, Ta 1.46, Nb 1.46, V 1.34.
+- Elemental data: pymatgen periodic-table data for radii/Tm/VEC; Materials Project (mp-api) for elemental ground-state structures. Metallic radii (Å): W 1.39, Mo 1.39, Ta 1.46, Nb 1.46, V 1.34.
+- Materials Project ground states: W mp-91 (Im-3m), Mo mp-129 (Im-3m), Ta mp-569794 (P4_2/mnm), Nb mp-75 (Im-3m), V mp-146 (Im-3m)
+  - Note: the lowest-energy Materials Project entry for Ta is not bcc (Im-3m), although the element is bcc experimentally. These structures are recorded for reference only; no feature uses them.
 - Binary ΔH_mix: Takeuchi & Inoue, Mater. Trans. 46 (2005) 2817, via matminer.
 - Training data: `data/MPEA_dataset.csv`, copied from github.com/CitrineInformatics/MPEA_dataset (commit d31e251, Apache-2.0).
 - Self-check (run every execution; the pipeline stops if any fails):
