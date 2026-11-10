@@ -66,7 +66,7 @@ DH_PAIR = {
 }
 
 # Empirical thresholds for the rule-based BCC solid-solution baseline
-DELTA_MAX = 6.6    # % ; Yang & Zhang, Mater. Chem. Phys. 132 (2012) 233
+DELTA_MAX = 6.6    # % ; Yang & Zhang, Mater. Chem. Phys. 132 (2012) 233 (as cited; original not re-read, see docs/research)
 OMEGA_MIN = 1.1    # Yang & Zhang (2012)
 VEC_BCC_MAX = 6.87 # Guo et al., J. Appl. Phys. 109 (2011) 103505
 
@@ -454,8 +454,8 @@ def write_report(df, top, exp, exp_stats, metrics, importances, checks, d, path,
         "- **What 'BCC' means here.** The label is the phase each paper reported for its "
         "processing state (as-cast, wrought, annealed...), not a verified equilibrium phase. "
         "The features cannot see slow ordering to B2 "
-        "(predicted for Mo-Nb-Ta-W by Widom et al., JOM 2013) or Laves formation in V-Ta "
-        "(V₂Ta). Check top candidates with CALPHAD (e.g. Thermo-Calc) before any experiment.\n")
+        "(predicted for Mo-Nb-Ta-W by Huhn & Widom, JOM 65 (2013) 1772) or the Laves "
+        "phases of the V-Ta binary. Check top candidates with CALPHAD (e.g. Thermo-Calc) before any experiment.\n")
 
     L.append("## Data sources and checks\n")
     L.append(f"- Elemental data: {d.source}. Metallic radii (Å): " +
