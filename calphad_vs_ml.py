@@ -41,9 +41,9 @@ def compositions() -> dict[str, dict[str, float]]:
     comps = {}
     for (n, (label, _)), (name, c) in zip(cs.COMPOSITIONS.items(), CANDIDATES.items()):
         comps[f"#{n}"] = c
-    pts = pd.read_csv(HERE / "calphad_test_points.csv")
-    for _, r in pts.iterrows():
-        comps[r["id"]] = {e: r[e] / 100 for e in hm.ELEMENTS}
+    for f in [HERE / "calphad_test_points.csv", *sorted(HERE.glob("calphad_round*_points.csv"))]:
+        for _, r in pd.read_csv(f).iterrows():
+            comps[r["id"]] = {e: r[e] / 100 for e in hm.ELEMENTS}
     return comps
 
 
