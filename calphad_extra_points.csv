@@ -4,3 +4,8 @@ R2-2m,R2-2 values entered as mass % in Thermo-Calc; mole % shown,12.37,20.17,13.
 R2-3m,R2-3 values entered as mass % in Thermo-Calc; mole % shown,3.81,17.11,20.17,34.89,24.02
 R2-4m,R2-4 values entered as mass % in Thermo-Calc; mole % shown,9.35,8.47,20.35,28.28,33.55
 R2-5m,R2-5 values entered as mass % in Thermo-Calc; mole % shown,21.52,7.94,10.37,40.75,19.42
+R3-1s,"R3-1 values entered one element over (Mo<-W, Ta<-Mo, Nb<-Ta, V<-Nb, W balance); actual mole % shown",9.8,30.1,12.7,24.6,22.8
+R3-2s,"R3-2 values entered one element over (Mo<-W, Ta<-Mo, Nb<-Ta, V<-Nb, W balance); actual mole % shown",12.7,25.3,7.3,21.8,32.9
+R3-3s,"R3-3 values entered one element over (Mo<-W, Ta<-Mo, Nb<-Ta, V<-Nb, W balance); actual mole % shown",6.5,21.9,17.1,30.2,24.3
+R3-4s,"R3-4 values entered one element over (Mo<-W, Ta<-Mo, Nb<-Ta, V<-Nb, W balance); actual mole % shown",7.8,15.1,13.9,32.6,30.6
+R3-5s,"R3-5 values entered one element over (Mo<-W, Ta<-Mo, Nb<-Ta, V<-Nb, W balance); actual mole % shown",20.5,34.7,19.2,5.4,20.2
