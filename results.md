@@ -57,8 +57,6 @@ Feature importances: delta_pct 0.124, dH_mix_kJmol 0.128, VEC 0.385, dS_mix_Jmol
 | WMoTaV | 0.832 | 7,533 | - |
 | WMoNbV | 0.720 | 9,926 | - |
 
-**CALPHAD follow-up:** selected candidates were checked in Thermo-Calc (TCHEA); see [`calphad_results.md`](calphad_results.md).
-
 ## Limits — read before using the ranking
 
 - **Predictions for this system are near the ceiling.** P(BCC) ranges 0.661–0.999 across the 10,000 compositions (median 0.903); 51% are ≥ 0.9. The model is confident the whole region is BCC-forming, and differences between ranks are small.
