@@ -426,7 +426,7 @@ def write_report(df, top, exp, exp_stats, metrics, importances, checks, d, path,
     calphad = Path(__file__).with_name("calphad_results.md")
     if calphad.exists():
         L.append("**CALPHAD follow-up:** selected candidates were checked in Thermo-Calc "
-                 "(TCHEA); see [`calphad_results.md`](calphad_results.md).\n")
+                 "(TCHEA6 v6.1); see [`calphad_results.md`](calphad_results.md).\n")
     if Path(__file__).with_name("calphad_vs_ml.md").exists():
         L.append("**Model check:** how well P(BCC) agrees with Thermo-Calc across all calculated "
                  "alloys is in [`calphad_vs_ml.md`](calphad_vs_ml.md).\n")

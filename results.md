@@ -57,7 +57,7 @@ Feature importances: delta_pct 0.124, dH_mix_kJmol 0.128, VEC 0.385, dS_mix_Jmol
 | WMoTaV | 0.832 | 7,533 | - |
 | WMoNbV | 0.720 | 9,926 | - |
 
-**CALPHAD follow-up:** selected candidates were checked in Thermo-Calc (TCHEA); see [`calphad_results.md`](calphad_results.md).
+**CALPHAD follow-up:** selected candidates were checked in Thermo-Calc (TCHEA6 v6.1); see [`calphad_results.md`](calphad_results.md).
 
 **Model check:** how well P(BCC) agrees with Thermo-Calc across all calculated alloys is in [`calphad_vs_ml.md`](calphad_vs_ml.md).
 

@@ -1,6 +1,6 @@
-# CALPHAD check of W-Mo-Ta-Nb-V candidates (Thermo-Calc, TCHEA)
+# CALPHAD check of W-Mo-Ta-Nb-V candidates (Thermo-Calc, TCHEA6 v6.1)
 
-Equilibrium phase amounts from 500 to 3000 °C, computed by the user in Thermo-Calc Graphical Mode (TCHEA database) and summarised from the exported tables in `data/calphad/` by `calphad_summary.py`.
+Equilibrium phase amounts from 500 to 3000 °C, computed by the user in Thermo-Calc Graphical Mode (TCHEA6 High Entropy Alloy database, v6.1) and summarised from the exported tables in `data/calphad/` by `calphad_summary.py`.
 
 | # | Alloy (at.%) | Role | Solidus (°C) | Liquidus (°C) | Lowest T computed (°C) | Second solid phase | Verdict |
 |---:|---|---|---:|---:|---:|---|---|

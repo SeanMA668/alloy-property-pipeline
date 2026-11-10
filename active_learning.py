@@ -16,6 +16,8 @@ model is least certain. Writes calphad_round<N>_points.csv and active_learning.m
 Loop: run calphad_vs_ml.py -> active_learning.py -> run the batch in Thermo-Calc ->
 save hea_R<N>-<k>.csv files in data/calphad/ -> repeat.
 
+For batches that also weigh density and strength, use study_design.py.
+
 Usage: python active_learning.py [--batch 5] [--seed 0]
 """
 from __future__ import annotations

@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-calphad_summary.py - Summarise Thermo-Calc (TCHEA) temperature sweeps of the
+calphad_summary.py - Summarise Thermo-Calc (TCHEA6 v6.1) temperature sweeps of the
 W-Mo-Ta-Nb-V candidates and write calphad_results.md.
 
 Input: data/calphad/hea_<n>_<label>.csv, tab-separated tables exported from a
@@ -94,9 +94,9 @@ def main(argv=None):
                    else "single BCC at high T; second BCC at low T")
         rows.append((n, label, comp, s, second, low, verdict, f[0].name))
 
-    L = ["# CALPHAD check of W-Mo-Ta-Nb-V candidates (Thermo-Calc, TCHEA)\n",
+    L = ["# CALPHAD check of W-Mo-Ta-Nb-V candidates (Thermo-Calc, TCHEA6 v6.1)\n",
          "Equilibrium phase amounts from 500 to 3000 °C, computed by the user in Thermo-Calc "
-         "Graphical Mode (TCHEA database) and summarised from the exported tables in "
+         "Graphical Mode (TCHEA6 High Entropy Alloy database, v6.1) and summarised from the exported tables in "
          "`data/calphad/` by `calphad_summary.py`.\n",
          "| # | Alloy (at.%) | Role | Solidus (°C) | Liquidus (°C) | Lowest T computed (°C) | "
          "Second solid phase | Verdict |",
