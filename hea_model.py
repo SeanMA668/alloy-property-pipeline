@@ -423,6 +423,11 @@ def write_report(df, top, exp, exp_stats, metrics, importances, checks, d, path,
         L.append(f"| {''.join(els)} | {r['p_bcc']:.3f} | {ranks[idx]:,} | {obs_txt} |")
     L.append("")
 
+    calphad = Path(__file__).with_name("calphad_results.md")
+    if calphad.exists():
+        L.append("**CALPHAD follow-up:** selected candidates were checked in Thermo-Calc "
+                 "(TCHEA); see [`calphad_results.md`](calphad_results.md).\n")
+
     L.append("## Limits — read before using the ranking\n")
     L.append(
         f"- **Predictions for this system are near the ceiling.** P(BCC) ranges "
