@@ -15,7 +15,7 @@ temperature (a useful model should give a clearly negative value), with an exact
 permutation p-value because the sample is small. The same correlation is reported for
 each input feature, to show what the CALPHAD split actually tracks.
 
-Writes calphad_vs_ml.md. Usage: python calphad_vs_ml.py
+Writes calphad_vs_ml.md. Usage: python -m pipeline.calphad_vs_ml
 """
 from __future__ import annotations
 
@@ -29,11 +29,11 @@ import numpy as np
 import pandas as pd
 from scipy.stats import spearmanr
 
-import calphad_summary as cs
-import hea_model as hm
-from hea_properties import CANDIDATES
+from pipeline import calphad_summary as cs
+from pipeline import hea_model as hm
+from pipeline.hea_properties import CANDIDATES
+from pipeline import paths as P
 
-HERE = Path(__file__).parent
 SWEEP_MIN = 500.0
 
 
@@ -41,8 +41,8 @@ def compositions() -> dict[str, dict[str, float]]:
     comps = {}
     for (n, (label, _)), (name, c) in zip(cs.COMPOSITIONS.items(), CANDIDATES.items()):
         comps[f"#{n}"] = c
-    extra = HERE / "calphad_extra_points.csv"  # runs at compositions other than planned (e.g. mass-% entry)
-    for f in [HERE / "calphad_test_points.csv", *sorted(HERE.glob("calphad_round*_points.csv")),
+    extra = P.ROUNDS / "calphad_extra_points.csv"  # runs at compositions other than planned (e.g. mass-% entry)
+    for f in [P.ROUNDS / "calphad_test_points.csv", *sorted(P.ROUNDS.glob("calphad_round*_points.csv")),
               *([extra] if extra.exists() else [])]:
         for _, r in pd.read_csv(f).iterrows():
             comps[r["id"]] = {e: r[e] / 100 for e in hm.ELEMENTS}
@@ -51,7 +51,7 @@ def compositions() -> dict[str, dict[str, float]]:
 
 def file_for(key: str) -> Path | None:
     stem = f"hea_{key.lstrip('#')}_" if key.startswith("#") else f"hea_{key}."
-    hits = sorted(p for p in (HERE / "data" / "calphad").glob("hea_*.csv")
+    hits = sorted(p for p in P.CALPHAD.glob("hea_*.csv")
                   if p.name.startswith(stem) and "scheil" not in p.name)
     return hits[0] if hits else None
 
@@ -130,8 +130,8 @@ def main():
     L.append("Alloys 'single-phase to 500 °C' are assigned 500 °C, so they tie at the bottom of the "
              "ranking. Both methods are models: agreement or disagreement here says nothing "
              "directly about real alloys.\n")
-    (HERE / "calphad_vs_ml.md").write_text("\n".join(L))
-    df.to_csv(HERE / "data" / "calphad" / "calphad_vs_ml.csv", index=False)
+    (P.REPORTS / "calphad_vs_ml.md").write_text("\n".join(L))
+    df.to_csv(P.COMPARISON, index=False)
     print("\n".join(L))
 
 

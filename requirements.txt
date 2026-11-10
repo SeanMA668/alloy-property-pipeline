@@ -1,6 +1,10 @@
-numpy
-pandas
-scikit-learn
-pymatgen
-matminer
-mp-api
+# Versions the published results were produced with (Python 3.13).
+numpy==2.5.3
+pandas==2.3.3
+scipy==1.18.1
+scikit-learn==1.9.1
+matplotlib==3.11.2
+pymatgen==2026.10.24
+matminer==0.10.1
+mp-api==0.47.0
+pytest==9.1.1

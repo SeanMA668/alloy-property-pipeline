@@ -11,7 +11,7 @@ are far apart in composition (farthest-point sampling) and far from the five all
 already calculated. Compositions are rounded to 0.1 at.% with W as balance, exactly
 as they would be typed into Thermo-Calc.
 
-Writes calphad_test_points.csv. Usage: python select_calphad_points.py [--per-bin 3]
+Writes calphad_test_points.csv. Usage: python -m pipeline.select_calphad_points [--per-bin 3]
 """
 from __future__ import annotations
 
@@ -22,8 +22,9 @@ import io
 import numpy as np
 import pandas as pd
 
-import hea_model as hm
-from hea_properties import CANDIDATES
+from pipeline import hea_model as hm
+from pipeline.hea_properties import CANDIDATES
+from pipeline import paths as P
 
 ELS = hm.ELEMENTS  # W, Mo, Ta, Nb, V
 
@@ -43,7 +44,7 @@ def main(argv=None):
     ap = argparse.ArgumentParser()
     ap.add_argument("--per-bin", type=int, default=3)
     ap.add_argument("--seed", type=int, default=42)
-    ap.add_argument("--out", default="calphad_test_points.csv")
+    ap.add_argument("--out", default=str(P.ROUNDS / "calphad_test_points.csv"))
     args = ap.parse_args(argv)
 
     with contextlib.redirect_stdout(io.StringIO()):
