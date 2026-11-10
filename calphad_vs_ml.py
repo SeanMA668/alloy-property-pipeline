@@ -41,7 +41,9 @@ def compositions() -> dict[str, dict[str, float]]:
     comps = {}
     for (n, (label, _)), (name, c) in zip(cs.COMPOSITIONS.items(), CANDIDATES.items()):
         comps[f"#{n}"] = c
-    for f in [HERE / "calphad_test_points.csv", *sorted(HERE.glob("calphad_round*_points.csv"))]:
+    extra = HERE / "calphad_extra_points.csv"  # runs at compositions other than planned (e.g. mass-% entry)
+    for f in [HERE / "calphad_test_points.csv", *sorted(HERE.glob("calphad_round*_points.csv")),
+              *([extra] if extra.exists() else [])]:
         for _, r in pd.read_csv(f).iterrows():
             comps[r["id"]] = {e: r[e] / 100 for e in hm.ELEMENTS}
     return comps

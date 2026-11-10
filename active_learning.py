@@ -74,6 +74,18 @@ def farthest(Xc, ref, k):
     return idx
 
 
+
+def _ml_rho() -> float:
+    """|Spearman rho| between ML P(BCC) and CALPHAD split, from the current comparison table."""
+    from scipy.stats import spearmanr
+    d = pd.read_csv(HERE / "data" / "calphad" / "calphad_vs_ml.csv").dropna(subset=["p_bcc", "split_C"])
+    return abs(spearmanr(d.p_bcc, d.split_C).statistic)
+
+
+def _n_points() -> int:
+    return len(pd.read_csv(HERE / "data" / "calphad" / "calphad_vs_ml.csv"))
+
+
 def next_round() -> int:
     nums = [int(m.group(1)) for p in HERE.glob("calphad_round*_points.csv")
             if (m := re.search(r"round(\d+)_", p.name))]
@@ -134,7 +146,7 @@ def main(argv=None):
          "",
          f"The split model's raw uncertainty was {cv_split['calib']:.1f}× too narrow on held-out "
          "alloys, so all ± values and probabilities below are widened by that factor.\n",
-         f"For comparison, the cross-family ML model's P(BCC) reaches |ρ| = 0.43 on the split "
+         f"For comparison, the cross-family ML model's P(BCC) reaches |ρ| = {_ml_rho():.2f} on the split "
          "temperature for the same alloys (`calphad_vs_ml.md`). With so few points these errors "
          "are rough; they will tighten as rounds are added.\n",
          f"## Next batch to run (`{out_csv.name}`)\n",
@@ -149,7 +161,7 @@ def main(argv=None):
                  f"{r['p_split_below_goal']:.2f} | {r['pred_solidus_C']} |")
     L.append("")
     L.append("Treat the probabilities as a ranking, not literal odds: they assume the model's "
-             "smooth shape is right, which 14 points cannot confirm. Exploit picks sit near "
+             f"smooth shape is right, which {_n_points()} points cannot confirm. Exploit picks sit near "
              "alloys already known to be single-phase, which is why they look certain.\n")
     L.append("Split predictions below 500 °C mean 'single-phase over the whole calculated range'; "
              "the training data cannot resolve anything lower.\n")
