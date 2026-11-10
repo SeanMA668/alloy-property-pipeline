@@ -44,14 +44,18 @@ def summarise(path: Path) -> dict:
     solidus = float(solved.loc[solved[liq].notna(), tcol].min())
     liquidus = float(solved.loc[solved[liq] >= 0.999995, tcol].min())
 
-    # Second solid phase (e.g. BCC_B2#2): highest temperature it is present at
+    # Phase split: highest temperature where two or more solid phases coexist.
+    # Counted by amount, not by name, because Thermo-Calc may label the single
+    # high-temperature phase BCC_B2 in one run and BCC_B2#2 in another.
     extra = {}
-    for c in solids[1:]:
-        present = solved[solved[c].notna() & (solved[c] > 0)]
-        if len(present):
-            at_min = solved.loc[solved[tcol] == t_min, c].max()
-            extra[c.replace("Amount of ", "").replace(" [mol]", "")] = (
-                float(solved.loc[solved[c].notna(), tcol].max()), float(at_min))
+    n_solid = (solved[solids].fillna(0) > 1e-6).sum(axis=1)
+    if (n_solid >= 2).any():
+        # Thermo-Calc writes the exact boundary as a row where both solid
+        # columns are filled and one is 0; use it as the split temperature.
+        t_split = float(solved.loc[solved[solids].notna().sum(axis=1) >= 2, tcol].max())
+        low = solved[solved[tcol] == t_min][solids].fillna(0).iloc[0]
+        minority = float(low[low > 1e-6].min())
+        extra["second BCC (A2)"] = (t_split, minority)
     return {"solidus": solidus, "liquidus": liquidus, "t_min": t_min,
             "complete": t_min <= SWEEP_MIN_C + 1e-6, "extra": extra,
             "phases": [c.replace("Amount of ", "").replace(" [mol]", "") for c in phases]}
@@ -97,6 +101,9 @@ def main(argv=None):
         "- The equiatomic control splits into two disordered BCC phases below about 664 °C. "
         "Experiments report it single-phase BCC as cast (Senkov et al. 2010); at such low "
         "temperatures diffusion is slow, so the split may not occur in practice.\n"
+        "- The ML-favoured Ta/Nb-rich alloys (#1, #3) are the only ones that stay single-phase "
+        "down to 500 °C. The old rule-score pick (#4, W-Mo-V-rich) has the widest split: below "
+        "about 842 °C it separates into two BCC phases of roughly equal amount.\n"
         "- A sweep that stopped early (no solution below the listed temperature) leaves the "
         "low-temperature behaviour of that alloy unknown, not single-phase.\n"
         "- These are equilibrium calculations with one database. They screen candidates; they "
