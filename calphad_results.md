@@ -18,4 +18,16 @@ Equilibrium phase amounts from 500 to 3000 °C, computed by the user in Thermo-C
 - A sweep that stopped early (no solution below the listed temperature) leaves the low-temperature behaviour of that alloy unknown, not single-phase.
 - These are equilibrium calculations with one database. They screen candidates; they do not replace making and characterising the alloy.
 
+## Scheil solidification (worst-case casting)
+
+Classic Scheil: no diffusion in the solid while the alloy freezes. A wide range between the liquidus and the last-liquid temperature means strong segregation (coring) in an as-cast ingot, which a homogenisation anneal would have to remove.
+
+| # | Alloy | Liquidus (°C) | T at 50 % solid (°C) | T at 90 % solid (°C) | Last liquid (°C) | Freezing range (°C) | Equilibrium solidus (°C) |
+|---:|---|---:|---:|---:|---:|---:|---:|
+| 1 | W23.1 Mo7.1 Ta25.5 Nb25.2 V19.1 | 2712 | 2584 | 2183 | 1868 (at 99 % solid) | 844 | 2474 |
+| 3 | W15.1 Mo15.6 Ta29.0 Nb25.7 V14.6 | 2693 | 2602 | 2322 | 1890 (at 99 % solid) | 803 | 2521 |
+
+- Only LIQUID and BCC_A2 appear in the Scheil plots: no second phase forms even in the last liquid (read from the exported plots; the tables hold only temperature and fraction solid).
+- The Scheil liquidus differs by a few °C from the equilibrium sweep for the same composition. That is within the precision of the two calculation types and does not change any conclusion.
+
 Phase columns found per file: #1: BCC_B2, LIQUID; #2: BCC_B2, BCC_B2#2, LIQUID; #3: BCC_B2, LIQUID; #4: BCC_B2, BCC_B2#2, LIQUID; #5: BCC_B2, BCC_B2#2, LIQUID.
