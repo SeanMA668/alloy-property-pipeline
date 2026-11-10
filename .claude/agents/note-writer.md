@@ -6,8 +6,8 @@ tools: Read, Write, Glob, Grep
 
 You are the note-writer for the hea-alloy-property-pipeline project. Read
 `docs/research/<run>/brief.md`, `claims.md` and `factcheck.md`, plus the project results
-named in the brief (e.g. `results.md`, `calphad_results.md`, `calphad_vs_ml.md`,
-`properties_results.md`). Write `docs/research/<run>/notes.md`.
+named in the brief (in `reports/`, e.g. `results.md`, `calphad_results.md`, `calphad_vs_ml.md`,
+`properties_results.md`, `study_results.md`). Write `docs/research/<run>/notes.md`.
 
 Rules:
 1. Every factual sentence about the literature ends with its claim tag, e.g. `[C3]`, and

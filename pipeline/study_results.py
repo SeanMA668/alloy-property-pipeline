@@ -7,7 +7,7 @@ rule-of-mixtures density and the Random Forest yield-strength estimate at 1000 C
 the single-phase alloys that no other single-phase alloy beats on both solidus and
 density, and reports leave-one-out accuracy of the Gaussian-process surrogates.
 
-Writes study_results.md and data/calphad/study_results.csv. Usage: python study_results.py
+Writes study_results.md and data/calphad/study_results.csv. Usage: python -m pipeline.study_results
 """
 from __future__ import annotations
 
@@ -18,17 +18,17 @@ from pathlib import Path
 import numpy as np
 import pandas as pd
 
-import active_learning as al
-import hea_model as hm
-import study_design as sd
+from pipeline import active_learning as al
+from pipeline import hea_model as hm
+from pipeline import study_design as sd
+from pipeline import paths as P
 
-HERE = Path(__file__).parent
 ELS = al.ELS
 YS_T = sd.YS_T
 
 
 def main():
-    d = pd.read_csv(HERE / "data" / "calphad" / "calphad_vs_ml.csv")
+    d = pd.read_csv(P.COMPARISON)
     X = d[ELS].to_numpy() / 100
 
     from pymatgen.core import Element
@@ -49,7 +49,7 @@ def main():
 
     cv_split = al.loo(X, d["split_C"].to_numpy(), 0)
     cv_sol = al.loo(X, d["solidus_C"].to_numpy(), 0)
-    d.to_csv(HERE / "data" / "calphad" / "study_results.csv", index=False)
+    d.to_csv(P.CALPHAD / "study_results.csv", index=False)
 
     def row(r):
         comp = " ".join(f"{e}{r[e]:.1f}" for e in ELS)
@@ -111,7 +111,7 @@ def main():
           "input errors; they are included at the compositions actually calculated "
           "(`calphad_extra_points.csv`, `calphad_round3_points.csv`).\n",
           "Full table: `data/calphad/study_results.csv`.\n"]
-    (HERE / "study_results.md").write_text("\n".join(L))
+    (P.REPORTS / "study_results.md").write_text("\n".join(L))
     print("\n".join(L))
 
 

@@ -18,7 +18,7 @@ save hea_R<N>-<k>.csv files in data/calphad/ -> repeat.
 
 For batches that also weigh density and strength, use study_design.py.
 
-Usage: python active_learning.py [--batch 5] [--seed 0]
+Usage: python -m pipeline.active_learning [--batch 5] [--seed 0]
 """
 from __future__ import annotations
 
@@ -32,8 +32,8 @@ from scipy.stats import norm, spearmanr
 from sklearn.gaussian_process import GaussianProcessRegressor
 from sklearn.gaussian_process.kernels import RBF, ConstantKernel, WhiteKernel
 from sklearn.model_selection import LeaveOneOut
+from pipeline import paths as P
 
-HERE = Path(__file__).parent
 ELS = ["W", "Mo", "Ta", "Nb", "V"]
 SPLIT_GOAL = 550.0      # want the split below this (C)
 SOLIDUS_MIN = 2450.0    # and a solidus at least this high (C)
@@ -80,16 +80,16 @@ def farthest(Xc, ref, k):
 def _ml_rho() -> float:
     """|Spearman rho| between ML P(BCC) and CALPHAD split, from the current comparison table."""
     from scipy.stats import spearmanr
-    d = pd.read_csv(HERE / "data" / "calphad" / "calphad_vs_ml.csv").dropna(subset=["p_bcc", "split_C"])
+    d = pd.read_csv(P.COMPARISON).dropna(subset=["p_bcc", "split_C"])
     return abs(spearmanr(d.p_bcc, d.split_C).statistic)
 
 
 def _n_points() -> int:
-    return len(pd.read_csv(HERE / "data" / "calphad" / "calphad_vs_ml.csv"))
+    return len(pd.read_csv(P.COMPARISON))
 
 
 def next_round() -> int:
-    nums = [int(m.group(1)) for p in HERE.glob("calphad_round*_points.csv")
+    nums = [int(m.group(1)) for p in P.ROUNDS.glob("calphad_round*_points.csv")
             if (m := re.search(r"round(\d+)_", p.name))]
     return max(nums, default=1) + 1
 
@@ -101,7 +101,7 @@ def main(argv=None):
     args = ap.parse_args(argv)
     rng = np.random.default_rng(args.seed)
 
-    d = pd.read_csv(HERE / "data" / "calphad" / "calphad_vs_ml.csv")
+    d = pd.read_csv(P.COMPARISON)
     X = d[ELS].to_numpy() / 100
     y_split, y_sol = d["split_C"].to_numpy(), d["solidus_C"].to_numpy()
     cv_split, cv_sol = loo(X, y_split, args.seed), loo(X, y_sol, args.seed)
@@ -134,7 +134,7 @@ def main(argv=None):
                      "p_split_below_goal": round(float(p_good[i]), 2),
                      "pred_solidus_C": round(float(sol[i]))})
     batch = pd.DataFrame(rows)
-    out_csv = HERE / f"calphad_round{rnd}_points.csv"
+    out_csv = P.ROUNDS / f"calphad_round{rnd}_points.csv"
     batch.to_csv(out_csv, index=False)
 
     L = [f"# Active learning, round {rnd}\n",
@@ -167,7 +167,7 @@ def main(argv=None):
              "alloys already known to be single-phase, which is why they look certain.\n")
     L.append("Split predictions below 500 °C mean 'single-phase over the whole calculated range'; "
              "the training data cannot resolve anything lower.\n")
-    (HERE / "active_learning.md").write_text("\n".join(L))
+    (P.REPORTS / "active_learning.md").write_text("\n".join(L))
     print("\n".join(L))
 
 

@@ -21,7 +21,7 @@ Stages
                          compared against the published empirical rules on the same alloys.
   5. Reporting         : top-20 compositions by predicted P(single-phase BCC) -> results.md
 
-Usage:  python hea_model.py [--n 10000] [--seed 42] [--out results.md]
+Usage: python -m pipeline.hea_model [--n 10000] [--seed 42] [--out results.md]
 """
 from __future__ import annotations
 
@@ -39,6 +39,7 @@ import pandas as pd
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.metrics import balanced_accuracy_score, roc_auc_score
 from sklearn.model_selection import GroupKFold, cross_val_predict
+from pipeline import paths as P
 
 warnings.filterwarnings("ignore", message=".*metallic_radius.*")
 warnings.filterwarnings("ignore", message=".*No Pauling electronegativity.*")
@@ -47,7 +48,7 @@ warnings.filterwarnings("ignore", module="matminer")
 
 ELEMENTS = ["W", "Mo", "Ta", "Nb", "V"]
 R_GAS = 8.314462618  # J / (mol K)
-DATA_PATH = Path(__file__).with_name("data") / "MPEA_dataset.csv"
+DATA_PATH = P.MPEA
 
 # Binary mixing enthalpies (kJ/mol) for the five target elements, Takeuchi & Inoue
 # (2005). Entered by hand; `self_check()` verifies every value against matminer's copy
@@ -423,14 +424,16 @@ def write_report(df, top, exp, exp_stats, metrics, importances, checks, d, path,
         L.append(f"| {''.join(els)} | {r['p_bcc']:.3f} | {ranks[idx]:,} | {obs_txt} |")
     L.append("")
 
-    calphad = Path(__file__).with_name("calphad_results.md")
+    calphad = (P.REPORTS / "calphad_results.md")
     if calphad.exists():
         L.append("**CALPHAD follow-up:** selected candidates were checked in Thermo-Calc "
-                 "(TCHEA6 v6.1); see [`calphad_results.md`](calphad_results.md).\n")
-    if Path(__file__).with_name("calphad_vs_ml.md").exists():
+                 "(TCHEA6 v6.1); see [`calphad_results.md`](calphad_results.md)."
+                 + (" The full Thermo-Calc study is summarised in [`study_results.md`](study_results.md)."
+                    if (P.REPORTS / "study_results.md").exists() else "") + "\n")
+    if (P.REPORTS / "calphad_vs_ml.md").exists():
         L.append("**Model check:** how well P(BCC) agrees with Thermo-Calc across all calculated "
                  "alloys is in [`calphad_vs_ml.md`](calphad_vs_ml.md).\n")
-    if Path(__file__).with_name("properties_results.md").exists():
+    if (P.REPORTS / "properties_results.md").exists():
         L.append("**Properties:** predicted density and compressive yield strength of the "
                  "checked candidates are in [`properties_results.md`](properties_results.md).\n")
 
@@ -484,7 +487,7 @@ def main(argv=None):
     ap = argparse.ArgumentParser(description=__doc__.split("\n")[1])
     ap.add_argument("--n", type=int, default=10_000)
     ap.add_argument("--seed", type=int, default=42)
-    ap.add_argument("--out", default="results.md")
+    ap.add_argument("--out", default=str(P.REPORTS / "results.md"))
     ap.add_argument("--data", default=str(DATA_PATH), help="MPEA_dataset.csv path")
     ap.add_argument("--csv", default=None, help="optionally save the full dataset")
     args = ap.parse_args(argv)

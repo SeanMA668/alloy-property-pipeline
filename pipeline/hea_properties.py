@@ -12,7 +12,7 @@ hea_properties.py - Density and compressive yield strength of W-Mo-Ta-Nb-V candi
   Hardness : evaluated the same way and reported, but not used: it does not beat a
              mean-value baseline by enough to rank candidates.
 
-Writes properties_results.md.  Usage: python hea_properties.py [--seed 42]
+Writes properties_results.md.  Usage: python -m pipeline.hea_properties [--seed 42]
 """
 from __future__ import annotations
 
@@ -26,11 +26,12 @@ from sklearn.ensemble import RandomForestRegressor
 from sklearn.metrics import mean_absolute_error, r2_score
 from sklearn.model_selection import GroupKFold, cross_val_predict
 
-import hea_model as hm
+from pipeline import hea_model as hm
+from pipeline import paths as P
 
 warnings.filterwarnings("ignore")
 
-DATA = Path(__file__).with_name("data") / "MPEA_dataset.csv"
+DATA = P.MPEA
 TEMPS_C = [25, 600, 1000, 1200]
 
 # Candidates checked in Thermo-Calc (see calphad_results.md), mole fractions
@@ -78,7 +79,7 @@ def rf(seed):
 def main(argv=None):
     ap = argparse.ArgumentParser()
     ap.add_argument("--seed", type=int, default=42)
-    ap.add_argument("--out", default="properties_results.md")
+    ap.add_argument("--out", default=str(P.REPORTS / "properties_results.md"))
     args = ap.parse_args(argv)
 
     df = load(DATA)

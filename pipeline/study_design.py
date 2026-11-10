@@ -13,7 +13,7 @@ The batch is spread along the Pareto front of these three (no pick is beaten on 
 by another feasible composition), plus a few "explore" points where the split model is
 least certain. Writes calphad_round<N>_points.csv and study_design.md.
 
-Usage: python study_design.py [--batch 16] [--explore 3] [--target 50] [--seed 0]
+Usage: python -m pipeline.study_design [--batch 16] [--explore 3] [--target 50] [--seed 0]
 """
 from __future__ import annotations
 
@@ -26,11 +26,11 @@ import numpy as np
 import pandas as pd
 from scipy.stats import norm
 
-import active_learning as al
-import hea_model as hm
-import hea_properties as hp
+from pipeline import active_learning as al
+from pipeline import hea_model as hm
+from pipeline import hea_properties as hp
+from pipeline import paths as P
 
-HERE = Path(__file__).parent
 ELS = al.ELS
 P_MIN = 0.9          # required calibrated P(split < 550 C)
 YS_T = 1000          # test temperature for the strength goal (C)
@@ -65,7 +65,7 @@ def main(argv=None):
     a = ap.parse_args(argv)
     rng = np.random.default_rng(a.seed)
 
-    d = pd.read_csv(HERE / "data" / "calphad" / "calphad_vs_ml.csv")
+    d = pd.read_csv(P.COMPARISON)
     X = d[ELS].to_numpy() / 100
     cv_split = al.loo(X, d["split_C"].to_numpy(), a.seed)
     cv_sol = al.loo(X, d["solidus_C"].to_numpy(), a.seed)
@@ -100,9 +100,9 @@ def main(argv=None):
     unc = unc[np.argsort(-sd[unc])][:400]
     picks += [unc[i] for i in al.farthest(P[unc], np.vstack([X, P[picks]]), a.explore)]
 
-    old = HERE / f"calphad_round{al.next_round() - 1}_points.csv"
+    old = P.ROUNDS / f"calphad_round{al.next_round() - 1}_points.csv"
     rnd = al.next_round()
-    if old.exists() and not list((HERE / "data" / "calphad").glob(f"hea_R{rnd - 1}-*.csv")):
+    if old.exists() and not list(P.CALPHAD.glob(f"hea_R{rnd - 1}-*.csv")):
         rnd -= 1   # previous round file was never run: replace it
     rows = []
     for k, i in enumerate(picks, 1):
@@ -116,7 +116,7 @@ def main(argv=None):
                      "density_gcc": round(float(rho[i]), 2),
                      f"pred_YS_{YS_T}C_MPa": None if np.isnan(ys[i]) else round(float(ys[i]))})
     b = pd.DataFrame(rows)
-    out = HERE / f"calphad_round{rnd}_points.csv"
+    out = P.ROUNDS / f"calphad_round{rnd}_points.csv"
     b.to_csv(out, index=False)
 
     yf = ys[feas]
@@ -154,7 +154,7 @@ def main(argv=None):
     L += ["", "Split predictions below 500 °C mean single-phase over the whole calculated range. "
           "Explore points are chosen to teach the model, not because they are expected to pass; "
           "their strength is not predicted (they fail the single-phase screen).\n"]
-    (HERE / "study_design.md").write_text("\n".join(L))
+    (P.REPORTS / "study_design.md").write_text("\n".join(L))
     print("\n".join(L))
 
 

@@ -8,7 +8,7 @@ Thermo-Calc Equilibrium Calculator one-axis temperature sweep (500-3000 C) with
 "Amount of phase" for all phases. Every number in the report is read from these
 files; nothing is typed in by hand except the compositions entered in Thermo-Calc.
 
-Usage:  python calphad_summary.py [--dir data/calphad] [--out calphad_results.md]
+Usage: python -m pipeline.calphad_summary [--dir data/calphad] [--out calphad_results.md]
 """
 from __future__ import annotations
 
@@ -17,6 +17,7 @@ from pathlib import Path
 
 import numpy as np
 import pandas as pd
+from pipeline import paths as P
 
 # Compositions entered in Thermo-Calc (mole %, W = balance); see hea_model results.md
 COMPOSITIONS = {
@@ -74,8 +75,8 @@ def summarise_scheil(path: Path) -> dict:
 
 def main(argv=None):
     ap = argparse.ArgumentParser()
-    ap.add_argument("--dir", default=str(Path(__file__).with_name("data") / "calphad"))
-    ap.add_argument("--out", default="calphad_results.md")
+    ap.add_argument("--dir", default=str(P.CALPHAD))
+    ap.add_argument("--out", default=str(P.REPORTS / "calphad_results.md"))
     args = ap.parse_args(argv)
 
     rows = []
