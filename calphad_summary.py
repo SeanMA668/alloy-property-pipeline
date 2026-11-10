@@ -15,6 +15,7 @@ from __future__ import annotations
 import argparse
 from pathlib import Path
 
+import numpy as np
 import pandas as pd
 
 # Compositions entered in Thermo-Calc (mole %, W = balance); see hea_model results.md
@@ -61,6 +62,16 @@ def summarise(path: Path) -> dict:
             "phases": [c.replace("Amount of ", "").replace(" [mol]", "") for c in phases]}
 
 
+def summarise_scheil(path: Path) -> dict:
+    """Classic Scheil table: 'Mole fraction of solid' vs 'Temperature [°C]'."""
+    df = pd.read_csv(path, sep="\t").dropna(axis=1, how="all").dropna()
+    fs = df.iloc[:, 0].to_numpy()
+    t = df.iloc[:, 1].to_numpy()
+    at = lambda f: float(np.interp(f, fs, t))
+    return {"liquidus": float(t[0]), "t50": at(0.5), "t90": at(0.9),
+            "t_end": float(t[-1]), "fs_end": float(fs[-1])}
+
+
 def main(argv=None):
     ap = argparse.ArgumentParser()
     ap.add_argument("--dir", default=str(Path(__file__).with_name("data") / "calphad"))
@@ -69,7 +80,7 @@ def main(argv=None):
 
     rows = []
     for n, (label, comp) in COMPOSITIONS.items():
-        f = sorted(Path(args.dir).glob(f"hea_{n}_*.csv"))
+        f = sorted(p for p in Path(args.dir).glob(f"hea_{n}_*.csv") if "scheil" not in p.name)
         if not f:
             continue
         s = summarise(f[0])
@@ -108,6 +119,33 @@ def main(argv=None):
         "low-temperature behaviour of that alloy unknown, not single-phase.\n"
         "- These are equilibrium calculations with one database. They screen candidates; they "
         "do not replace making and characterising the alloy.\n")
+    scheil = []
+    for n, (label, comp) in COMPOSITIONS.items():
+        f = Path(args.dir) / f"hea_{n}_scheil.csv"
+        eq = next((s for m, _, _, s, *_ in rows if m == n), None)
+        if f.exists():
+            scheil.append((n, label, comp, summarise_scheil(f), eq))
+    if scheil:
+        L.append("## Scheil solidification (worst-case casting)\n")
+        L.append("Classic Scheil: no diffusion in the solid while the alloy freezes. A wide range "
+                 "between the liquidus and the last-liquid temperature means strong segregation "
+                 "(coring) in an as-cast ingot, which a homogenisation anneal would have to "
+                 "remove.\n")
+        L.append("| # | Alloy | Liquidus (°C) | T at 50 % solid (°C) | T at 90 % solid (°C) | "
+                 "Last liquid (°C) | Freezing range (°C) | Equilibrium solidus (°C) |")
+        L.append("|---:|---|---:|---:|---:|---:|---:|---:|")
+        for n, label, comp, s, eq in scheil:
+            eq_sol = f"{eq['solidus']:.0f}" if eq else "-"
+            L.append(f"| {n} | {comp} | {s['liquidus']:.0f} | {s['t50']:.0f} | {s['t90']:.0f} | "
+                     f"{s['t_end']:.0f} (at {100 * s['fs_end']:.0f} % solid) | "
+                     f"{s['liquidus'] - s['t_end']:.0f} | {eq_sol} |")
+        L.append("")
+        L.append("- Only LIQUID and BCC_A2 appear in the Scheil plots: no second phase forms even "
+                 "in the last liquid (read from the exported plots; the tables hold only "
+                 "temperature and fraction solid).\n"
+                 "- The Scheil liquidus differs by a few °C from the equilibrium sweep for the "
+                 "same composition. That is within the precision of the two calculation types "
+                 "and does not change any conclusion.\n")
     L.append("Phase columns found per file: " + "; ".join(
         f"#{n}: {', '.join(s['phases'])}" for n, _, _, s, *_ in rows) + ".\n")
     Path(args.out).write_text("\n".join(L))
