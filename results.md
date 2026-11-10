@@ -69,7 +69,7 @@ Feature importances: delta_pct 0.124, dH_mix_kJmol 0.128, VEC 0.385, dS_mix_Jmol
 - **The ranking is not stable.** Retraining with a different random seed keeps 4 of the top 20. Treat the list as a region of composition space, not 20 distinct winners.
 - **The ranking is driven mostly by VEC.** Across all alloy families, low VEC separates BCC alloys from FCC ones, so the model favours Ta- and Nb-rich, Mo-lean compositions. That is a cross-family trend, not evidence about which W-Mo-Ta-Nb-V alloys stay single-phase.
 - **Little in-system evidence.** Only 4 training alloys use only these five elements (MoNbTaV, MoNbTaVW, MoNbTaW, NbTaVW); 4 of them are single-phase BCC. Everything else the model knows comes from other alloy families.
-- **What 'BCC' means here.** The label is the phase each paper reported for its processing state (as-cast, wrought, annealed...), not a verified equilibrium phase. The features cannot see slow ordering to B2 (predicted for Mo-Nb-Ta-W by Widom et al., JOM 2013) or Laves formation in V-Ta (V₂Ta). Check top candidates with CALPHAD (e.g. Thermo-Calc) before any experiment.
+- **What 'BCC' means here.** The label is the phase each paper reported for its processing state (as-cast, wrought, annealed...), not a verified equilibrium phase. The features cannot see slow ordering to B2 (predicted for Mo-Nb-Ta-W by Huhn & Widom, JOM 65 (2013) 1772) or the Laves phases of the V-Ta binary. Check top candidates with CALPHAD (e.g. Thermo-Calc) before any experiment.
 
 ## Data sources and checks
 
