@@ -36,15 +36,20 @@ def summarise(path: Path) -> dict:
     tcol = [c for c in df.columns if c.startswith("Temperature")][0]
     df = df.dropna(subset=[tcol])
     phases = [c for c in df.columns if c.startswith("Amount of")]
-    liq = [c for c in phases if "LIQUID" in c][0]
+    liqs = [c for c in phases if "LIQUID" in c]
+    liq = liqs[0] if liqs else None          # None: sweep stopped before melting
     solids = [c for c in phases if c != liq]
 
     # Rows where Thermo-Calc returned a solution (at least one phase amount)
     solved = df[df[phases].notna().any(axis=1)]
     t_min = float(solved[tcol].min())
 
-    solidus = float(solved.loc[solved[liq].notna(), tcol].min())
-    liquidus = float(solved.loc[solved[liq] >= 0.999995, tcol].min())
+    t_max = float(solved[tcol].max())
+    if liq is None:
+        solidus = liquidus = float("nan")
+    else:
+        solidus = float(solved.loc[solved[liq].notna(), tcol].min())
+        liquidus = float(solved.loc[solved[liq] >= 0.999995, tcol].min())
 
     # Phase split: highest temperature where two or more solid phases coexist.
     # Counted by amount, not by name, because Thermo-Calc may label the single
@@ -59,7 +64,8 @@ def summarise(path: Path) -> dict:
         minority = float(low[low > 1e-6].min())
         extra["second BCC (A2)"] = (t_split, minority)
     return {"solidus": solidus, "liquidus": liquidus, "t_min": t_min,
-            "complete": t_min <= SWEEP_MIN_C + 1e-6, "extra": extra,
+            "t_max": t_max, "melted": liq is not None,
+            "complete": t_min <= SWEEP_MIN_C + 1e-6 and liq is not None, "extra": extra,
             "phases": [c.replace("Amount of ", "").replace(" [mol]", "") for c in phases]}
 
 
