@@ -22,7 +22,14 @@ Read this first when resuming work in a new session. Repo:
   with W at the Oct 2026 APT price, $160–239/kg and R5-4 becomes the cheapest. T6
   ($60/kg, 2688 °C, 12.70 g/cm³) is the cheapest single-phase alloy and on the
   solidus/density/cost trade-off front.
-- Repo polish: package layout, README with figures, 26 tests, GitHub Actions CI.
+- **Strength model check** (`reports/finalists.md` §3): Thermo-Calc's Yield Strength model
+  (Simplified, 1400 °C, solid-solution only) fails validation: rank order vs the four
+  measured alloys is wrong (ρ = −0.20); NbTaVW predicted 787 vs 1530 MPa measured; the
+  others are 209–445 MPa high. Finalists span only 1528–1691 MPa, so it cannot rank them.
+- **T6 Scheil:** 600 °C range, narrowest of all; liquid + BCC only. **L3** solidus 2281 °C,
+  liquidus 2463 °C. **Isopleth through R5-1** (`data/calphad/hea_R5-1_isopleth.png`):
+  single-phase to 500 °C up to ~11 % V (W balance); solidus at 6.4 % V matches the sweep.
+- Repo polish: package layout, README with figures, 27 tests, GitHub Actions CI.
 
 ## Finalists
 | Alloy | Mo | Ta | Nb | V | W | Solidus (°C) | Density (g/cm³) |
@@ -33,26 +40,19 @@ Read this first when resuming work in a new session. Repo:
 | R5-4 | 17.2 | 24.4 | 35.0 | 12.1 | 11.3 | 2499 | 11.85 |
 
 ## Waiting on Sean (Thermo-Calc / Granta)
-1. **Yield Strength property model**, Single, 25 °C, for WMoTaNbV, MoNbTaW, NbTaVW, MoNbTaV
-   (files `ys_5`, `ys_L1`, `ys_L2`, `ys_L3`). Measured values to compare (MPEA dataset, cast,
-   25 °C): 1246, 1058 (996), 1530, 1525 (annealed) MPa. If the model passes, run it for the
-   finalists (Batch mode).
-2. **Rerun L3 (MoNbTaV, no W, Mo balance)** from 2000 to 3000 °C: the sweep stopped at
-   2276 °C before melting, so its solidus is missing.
-3. **Scheil for T6** (cheapest single-phase alloy): mole %, Mo 26.9, Ta 5.5, Nb 30.2,
-   V 5.2, W balance (32.2); save as `hea_T6_scheil.csv/.png`, °C axis.
-4. **Granta EduPack table**: density, melting point, yield strength for W, Mo, Ta, Nb, TZM,
-   C-103, Ta-10W, Inconel 718, a single-crystal Ni superalloy (e.g. CMSX-4).
-5. Later: **set D** (one round with W and Ta allowed up to ~45 %; generate with
+1. **Granta EduPack table** (Level 3 or Aerospace): density, melting point/solidus, room-T
+   yield strength, max service temperature, price, for W, Mo, Ta, Nb, TZM, C-103, Ta-10W,
+   Inconel 718, CMSX-4. Export Table view to CSV/Excel.
+2. Optional: confirm `ys_L2` (NbTaVW) had solid-solution strengthening ticked; if it was
+   off, rerun. The conclusion holds either way (the other three already vary by 236 MPa).
+3. Later: **set D** (one round with W and Ta allowed up to ~45 %; generate with
    `study_design.py` after raising the cap) and **set C** (composition tolerance, try the
-   Property Model "Uncertainty" type on one finalist first). Phase Diagram isopleth through
-   R5-1 (V from 0 to 30 %) for a poster figure.
+   Property Model "Uncertainty" type on R5-1 first).
 
 ## Still to do (Claude, no Thermo-Calc needed)
 - Verify the V price and Nb/V producer shares against the USGS chapter PDFs (read from
   secondary summaries; see `reports/cost_supply.md`, Limits).
-- Decide whether T6 should join the finalists now that cost is an objective (after its
-  Scheil run, item 3 above).
+- Decide whether T6 joins the finalists (cheapest, narrowest Scheil range, solidus 2688 °C).
 - Optional: lattice parameters/elastic constants from an ML interatomic potential feeding a
   published physics-based strength model.
 - Browser dashboard (GitHub Pages, greys out compositions far from data), Ashby chart with
@@ -69,5 +69,5 @@ Read this first when resuming work in a new session. Repo:
 - Never commit the Materials Project API key; pass it only as `MP_API_KEY`.
 
 ## Branches
-- `main`: merged through PR #7 (ml-depth).
-- `cost-sensitivity`: sensitivity report, cost and supply-risk objectives (PR open).
+- `main`: merged through PR #8 (cost-sensitivity).
+- `ys-validation`: L3 solidus, T6 Scheil, isopleth, strength-model validation (PR open).

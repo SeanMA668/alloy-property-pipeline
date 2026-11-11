@@ -64,3 +64,11 @@ def test_price_conversions():
 def test_pareto_mask():
     df = pd.DataFrame({"a": [3, 2, 1, 3], "b": [1, 1, 0, 2]})   # maximise a, minimise b
     assert list(cs.pareto(df, ["a"], ["b"])) == [True, False, True, False]
+
+
+def test_yield_strength_exports_read_and_match_validation_alloys():
+    from pipeline import finalists as fz
+    v, f = fz.ys_rows()
+    assert len(v) == 4 and len(f) == 5
+    assert v.set_index("alloy").loc["WMoTaNbV", "calc"] == pytest.approx(1691.27, abs=0.01)
+    assert (f["calc"] > 500).all()
