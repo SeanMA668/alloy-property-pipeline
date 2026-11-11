@@ -63,6 +63,9 @@ Read this first when resuming work in a new session. Repo:
   percent and Kelvin (round 2 was entered in mass % by mistake).
 - Thermo-Calc's composition fields are in the order **Mo, Ta, Nb, V, with W as balance**.
   Give tables in that order (round 3 was shifted one element over).
+- The **Property Model Calculator uses Mo as balance**, with fields W, Ta, Nb, V. Type the W
+  value in the W box and check the greyed Mo value (the first finalist YS runs had W and Mo
+  swapped).
 - Sweep 500–3000 °C; export CSV + PNG with the axis in °C; name files `hea_<ID>.csv/.png`
   (Scheil: `hea_<ID>_scheil`). Plots for #1–#5, T1–T9, R2-*m may still have kelvin axes.
 - No HEA mobility database (MOBHEA), so Homogenization/Diffusion cannot be used.
