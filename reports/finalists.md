@@ -10,12 +10,12 @@ The MPEA dataset (Borg et al. 2020) contains experimental phase reports for four
 |---|---|---|---|---|
 | MoNbTaW | BCC (cast; powder) | single BCC 500 °C → melting | yes | doi:10.1016/j.intermet.2011.01.004 |
 | NbTaVW | BCC (cast) | single BCC 500 °C → melting | yes | doi:10.1016/j.msea.2016.07.102 |
-| MoNbTaV | BCC (annealed) | single BCC above 791 °C; two BCC below | yes, if processed above 791 °C | doi:10.3390/e18050189 |
+| MoNbTaV | BCC (as-cast) | single BCC above 791 °C; two BCC below | yes, if processed above 791 °C | doi:10.3390/e18050189 |
 | WMoTaNbV | BCC (cast; powder) | single BCC above 664 °C; two BCC below | yes, if processed above 664 °C | doi:10.1016/j.intermet.2011.01.004 |
 
 **Reading:** Thermo-Calc never contradicts the experiments. For MoNbTaW and NbTaVW it predicts single-phase BCC at every temperature. For WMoTaNbV and MoNbTaV it predicts a split into two BCC phases only below 664–791 °C. Casting and typical high-temperature anneals happen above that, and diffusion in these alloys is slow at such low temperatures, so the experiments would not be expected to see the split. This test therefore confirms the high-temperature phase predictions; it cannot confirm or rule out the predicted low-temperature split, which would need long anneals below about 800 °C.
 
-Caveats: only four alloys, all equiatomic and all single-phase in experiment, so the test cannot show whether Thermo-Calc correctly predicts a *failure*. The anneal temperature for MoNbTaV is not recorded in the dataset.
+Caveats: only four alloys, all equiatomic and all single-phase in experiment, so the test cannot show whether Thermo-Calc correctly predicts a *failure*. MoNbTaV is labelled "annealed" in the MPEA dataset, but its source (Yao et al., Entropy 2016) reports no anneal: it was tested as cast, so the dataset label is wrong (`docs/research/run-2026-11-11`).
 
 ## 2. How much do the finalists segregate when cast?
 
@@ -44,8 +44,8 @@ Yield Strength property model, Simplified mode, annealing temperature 1400 °C, 
 |---|---:|---:|---:|
 | WMoTaNbV (cast) | 1246 | 1691 | +445 |
 | MoNbTaW (cast; 996 in a second report) | 1058 | 1482 | +424 |
-| NbTaVW (cast) | 1530 | 787 | -743 |
-| MoNbTaV (annealed) | 1525 | 1734 | +209 |
+| NbTaVW (cast; value not verified against the primary source) | 1530 | 787 | -743 |
+| MoNbTaV (cast) | 1525 | 1734 | +209 |
 
 **Reading: it fails this test.** The rank order does not match (Spearman ρ = -0.20, n = 4). NbTaVW, the strongest alloy in experiments, is predicted the weakest, 743 MPa low. Without it the model overestimates every alloy, but by 209–445 MPa, a spread of 236 MPa that no single correction removes.
 
@@ -61,4 +61,4 @@ Thermo-Calc's values for the finalists, for the record:
 
 They span only 163 MPa, less than the 236 MPa variation in the model's error even on the three alloys it gets in the right order. So these numbers cannot separate the finalists, and the project keeps its own strength estimate (`properties_results.md`, about 200 MPa error) as a tie-breaker only. Strength remains the least certain property in this study.
 
-Caveats: four alloys, all equiatomic; measured strengths depend on processing (cast vs annealed) and test, which the model does not represent.
+Caveats: four alloys, all equiatomic. Three measured strengths are confirmed as-cast in their primary sources; NbTaVW is recorded as cast in the dataset, but its paper has not been read, and the 1530 MPa value has not been verified against it. The NbTaVW error (−743 MPa), the largest, rests on that unverified value. The 1400 °C annealing temperature used in the model matches none of the specimens. Measured strengths also depend on processing and test method, which the model does not represent (`docs/research/run-2026-11-11`).

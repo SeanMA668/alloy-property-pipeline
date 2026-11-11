@@ -28,3 +28,7 @@ load are listed, not counted as support.
 - `run-2026-11-09/`: phase stability after anneals, CALPHAD vs experiment, Ta/Nb-rich
   compositions, ML limits, strength scatter. SIGN-OFF: PASS (15 defects fixed by the
   auditor).
+- `run-2026-11-11/`: strength models, casting segregation, effect of V, cost and critical
+  raw materials, comparison with existing refractory alloys; checks of the cost and
+  validation inputs. SIGN-OFF: PASS (28 defects fixed by the auditor). Its 12 corrections
+  are applied in `pipeline/finalists.py` and `pipeline/cost_supply.py`.

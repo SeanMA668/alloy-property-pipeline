@@ -11,7 +11,9 @@ Per alloy (mole % -> mass fractions):
   cost_2025      $/kg alloy at 2025 annual-average prices (USGS MCS 2026)
   cost_W2026     same, with W at the October 2026 European APT price (2026 export-control spike)
   cost_per_L     cost_2025 x density: cost of a fixed volume, the fairer basis for a part
-  sr_eu          mass-weighted EU supply-risk score (EU CRM study 2023; >= 1.0 = high)
+  sr_eu          mass-weighted EU supply-risk score (EU CRM study 2023). A raw material is
+                 critical only if SR >= 1.0 AND economic importance EI >= 2.8; the rule
+                 applies to raw materials, not to alloys.
   w_cost_share   fraction of cost_2025 coming from tungsten
 
 Writes data/calphad/cost_supply.csv and reports/cost_supply.md.
@@ -54,24 +56,28 @@ PRICE_2025 = {
            "$26/kg ferroniobium (gross weight), 2025 unit value; ÷ 0.65 Nb (assumed grade)",
            f"{USGS}, Niobium"),
     "V":  (5.02 * LB_PER_KG / (0.98 * V_IN_V2O5),
-           "$5.02/lb V2O5 (98 %), China, 2025 avg; ÷ (0.98 × 0.560 kg V per kg V2O5)",
+           "$5.02/lb V2O5 (98 %), China, 2025 avg (est.); ÷ (0.98 × 0.560 kg V per kg V2O5)",
            f"{USGS}, Vanadium"),
 }
 # Scenario: tungsten during the 2026 Chinese export controls.
 W_2026 = (278.22 / (KG_W_PER_MTU / 10),
-          "$278.22/kg (≈ $2,782 per mtu WO3), APT, Rotterdam warehouse, October 2026; ÷ 0.793",
+          "$278.22/kg, APT, Rotterdam warehouse, October 2026; the source does not state the "
+          "basis, assumed per kg WO3 (≈ $2,782 per mtu); ÷ 0.793",
           "MetalMiner study reported in Canadian Mining Journal, 'Western tungsten prices "
           "nearly quadruple China's' (2026; data through October 2026)")
 
-# element: (EU 2023 supply-risk score, largest producer and share of 2025 world mine output)
+# element: (EU 2023 supply risk SR, largest producer and share of 2025 world mine output)
 SUPPLY = {
     "W":  (1.2, "China 79 % (67 of 85 kt)"),
     "Mo": (0.8, "China 37 % (97 of 260 kt)"),
     "Ta": (1.3, "Congo (Kinshasa) 52 % (1.3 of 2.5 kt)"),
-    "Nb": (4.4, "Brazil ~93 % (104 kt)"),
+    "Nb": (4.4, "Brazil ~93 % (104 of 112 kt)"),
     "V":  (2.3, "China ~75 % (82 of 110 kt)"),
 }
-SR_THRESHOLD = 1.0   # EU criticality threshold for supply risk
+# EU 2023 economic importance EI (same study, assessment-results table)
+EI = {"W": 8.7, "Mo": 6.7, "Ta": 4.8, "Nb": 6.5, "V": 3.9}
+# EU rule: a raw material is critical if SR >= 1.0 AND EI >= 2.8.
+SR_THRESHOLD, EI_THRESHOLD = 1.0, 2.8
 
 
 def prices(w_price: float | None = None) -> np.ndarray:
@@ -132,19 +138,20 @@ def main():
          "numbers rank alloys by the cost of what is in them; they are not the price of a "
          "part.\n",
          "## Inputs\n",
-         "| Element | $/kg element (2025) | Derived from | EU supply risk (2023) | Largest producer, 2025 |",
-         "|---|---:|---|---:|---|"]
+         "| Element | $/kg element (2025) | Derived from | EU supply risk (2023) | EU economic importance | Largest producer, 2025 |",
+         "|---|---:|---|---:|---:|---|"]
     for e in ELS:
         L.append(f"| {e} | {PRICE_2025[e][0]:.0f} | {PRICE_2025[e][1]} | {SUPPLY[e][0]:.1f} | "
-                 f"{SUPPLY[e][1]} |")
+                 f"{EI[e]:.1f} | {SUPPLY[e][1]} |")
     L += ["",
           f"Tungsten scenario: {W_2026[1]} → **${W_2026[0]:.0f}/kg W**, "
           f"{W_2026[0] / PRICE_2025['W'][0]:.1f}× the 2025 figure. This is a refined "
           "intermediate rather than concentrate, so it overstates the like-for-like change "
           "somewhat, but it is the price a European buyer faced in late 2026.\n",
-          "EU supply risk: 1.0 or higher counts as high (the EU criticality threshold). "
-          "Mo (0.8) is the only one of the five below it. The score reflects risk to EU "
-          "supply; it is used here as a general, citable indicator.\n",
+          f"EU rule: a raw material is critical if its supply risk is at least {SR_THRESHOLD:.1f} "
+          f"**and** its economic importance at least {EI_THRESHOLD:.1f}. W, Ta, Nb and V meet "
+          "both; Mo (SR 0.8) does not qualify. The score reflects risk to EU supply; it is "
+          "used here as a general, citable indicator.\n",
           "## Finalists\n",
           "| Alloy | Solidus (°C) | Density (g/cm³) | $/kg (2025) | $/kg (W at Oct 2026) | "
           "$/L (2025) | W share of cost | EU supply risk |",
@@ -177,10 +184,11 @@ def main():
           f"- **Supply risk is driven by Nb and V.** Nb has the highest EU score (4.4; about "
           f"93 % of mine output is Brazilian) and V the second (2.3). R5-4, the lightest "
           f"finalist, is also the most Nb-rich and has the highest score of the four "
-          f"({fin['sr_eu'].max():.2f}); R5-1 has the lowest ({fin['sr_eu'].min():.2f}). Every "
-          f"one of the 50 alloys scores {d['sr_eu'].min():.2f}–{d['sr_eu'].max():.2f}, above "
-          f"the EU threshold of {SR_THRESHOLD:.1f}: no composition in this family avoids "
-          "critical raw materials.",
+          f"({fin['sr_eu'].max():.2f}); R5-1 has the lowest ({fin['sr_eu'].min():.2f}). The "
+          f"mass-weighted scores of the 50 alloys span {d['sr_eu'].min():.2f}–"
+          f"{d['sr_eu'].max():.2f}. The EU threshold applies to raw materials, not alloys; "
+          "what matters is that every one of the 50 alloys contains W, Ta, Nb and V, all "
+          "EU-critical, so no composition in this family avoids critical raw materials.",
           f"- **Per volume the spread widens.** Dense W-Ta alloys cost more per kg *and* need "
           f"more kg for the same part: the finalists differ {f25.max() / f25.min():.2f}× per kg "
           f"but {fL.max() / fL.min():.2f}× per litre. Use $/L for a fixed component size.",
@@ -212,11 +220,10 @@ def main():
           "kg of contained Mo. Both are stated in the code so they can be changed.",
           "- No processing cost. Melting, homogenising and machining a refractory alloy usually "
           "cost more than its raw material; that is not modelled here.",
-          "- The W, Mo and Ta figures were read from the USGS chapters directly; the Nb price "
-          "from a search excerpt of the USGS Niobium chapter; the V price and the Nb and V "
-          "producer shares from secondary summaries quoting the USGS chapters, because those "
-          "PDFs could not be opened from this workspace. Check them against the chapters "
-          "before citing externally.\n",
+          "- The Nb and V prices and producer shares were checked against the USGS chapters "
+          "in research run 2026-11-11. The W, Mo and Ta figures were read from the USGS "
+          "chapters by the project; of these, only the Ta price was re-checked in that run "
+          "(`docs/research/run-2026-11-11`).\n",
           "## Sources\n",
           f"- {USGS}: chapters Tungsten, Molybdenum, Tantalum, Niobium (Columbium), Vanadium. "
           "https://pubs.usgs.gov/periodicals/mcs2026/",

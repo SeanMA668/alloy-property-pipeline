@@ -6,17 +6,17 @@ Raw-material cost and supply-risk scores for the 50 calculated alloys. Generated
 
 ## Inputs
 
-| Element | $/kg element (2025) | Derived from | EU supply risk (2023) | Largest producer, 2025 |
-|---|---:|---|---:|---|
-| W | 48 | $380 per mtu WO3, concentrate, Rotterdam, 2025 avg (est.); ÷ 7.93 kg W/mtu | 1.2 | China 79 % (67 of 85 kt) |
-| Mo | 51 | $51/kg, U.S. molybdic oxide (57 % Mo), 2025 avg; taken as per kg Mo contained | 0.8 | China 37 % (97 of 260 kt) |
-| Ta | 220 | $180/kg Ta2O5 in tantalite, 2025 avg (est.); ÷ 0.819 kg Ta per kg Ta2O5 | 1.3 | Congo (Kinshasa) 52 % (1.3 of 2.5 kt) |
-| Nb | 40 | $26/kg ferroniobium (gross weight), 2025 unit value; ÷ 0.65 Nb (assumed grade) | 4.4 | Brazil ~93 % (104 kt) |
-| V | 20 | $5.02/lb V2O5 (98 %), China, 2025 avg; ÷ (0.98 × 0.560 kg V per kg V2O5) | 2.3 | China ~75 % (82 of 110 kt) |
+| Element | $/kg element (2025) | Derived from | EU supply risk (2023) | EU economic importance | Largest producer, 2025 |
+|---|---:|---|---:|---:|---|
+| W | 48 | $380 per mtu WO3, concentrate, Rotterdam, 2025 avg (est.); ÷ 7.93 kg W/mtu | 1.2 | 8.7 | China 79 % (67 of 85 kt) |
+| Mo | 51 | $51/kg, U.S. molybdic oxide (57 % Mo), 2025 avg; taken as per kg Mo contained | 0.8 | 6.7 | China 37 % (97 of 260 kt) |
+| Ta | 220 | $180/kg Ta2O5 in tantalite, 2025 avg (est.); ÷ 0.819 kg Ta per kg Ta2O5 | 1.3 | 4.8 | Congo (Kinshasa) 52 % (1.3 of 2.5 kt) |
+| Nb | 40 | $26/kg ferroniobium (gross weight), 2025 unit value; ÷ 0.65 Nb (assumed grade) | 4.4 | 6.5 | Brazil ~93 % (104 of 112 kt) |
+| V | 20 | $5.02/lb V2O5 (98 %), China, 2025 avg (est.); ÷ (0.98 × 0.560 kg V per kg V2O5) | 2.3 | 3.9 | China ~75 % (82 of 110 kt) |
 
-Tungsten scenario: $278.22/kg (≈ $2,782 per mtu WO3), APT, Rotterdam warehouse, October 2026; ÷ 0.793 → **$351/kg W**, 7.3× the 2025 figure. This is a refined intermediate rather than concentrate, so it overstates the like-for-like change somewhat, but it is the price a European buyer faced in late 2026.
+Tungsten scenario: $278.22/kg, APT, Rotterdam warehouse, October 2026; the source does not state the basis, assumed per kg WO3 (≈ $2,782 per mtu); ÷ 0.793 → **$351/kg W**, 7.3× the 2025 figure. This is a refined intermediate rather than concentrate, so it overstates the like-for-like change somewhat, but it is the price a European buyer faced in late 2026.
 
-EU supply risk: 1.0 or higher counts as high (the EU criticality threshold). Mo (0.8) is the only one of the five below it. The score reflects risk to EU supply; it is used here as a general, citable indicator.
+EU rule: a raw material is critical if its supply risk is at least 1.0 **and** its economic importance at least 2.8. W, Ta, Nb and V meet both; Mo (SR 0.8) does not qualify. The score reflects risk to EU supply; it is used here as a general, citable indicator.
 
 ## Finalists
 
@@ -32,7 +32,7 @@ EU supply risk: 1.0 or higher counts as high (the EU criticality threshold). Mo 
 
 - **Tantalum sets the cost at 2025 prices.** At $220/kg it is 4–11× the other elements. Across the single-phase alloys ($60–132/kg), Ta content alone explains 98 % of the variation in cost. R5-13 (10 % Ta) is the cheapest finalist ($71/kg); R5-1 and R5-4 (24–29 % Ta) are the most expensive ($108/kg).
 - **The 2026 tungsten spike reverses the order.** With W at the October 2026 price, single-phase alloys cost 1.2–3.4× more. The three W-rich finalists (32–35 % W) rise to $208–239/kg, while R5-4 (11 % W) rises only to $160/kg and becomes the cheapest finalist. No finalist is cheapest under both price sets.
-- **Supply risk is driven by Nb and V.** Nb has the highest EU score (4.4; about 93 % of mine output is Brazilian) and V the second (2.3). R5-4, the lightest finalist, is also the most Nb-rich and has the highest score of the four (2.10); R5-1 has the lowest (1.37). Every one of the 50 alloys scores 1.31–2.50, above the EU threshold of 1.0: no composition in this family avoids critical raw materials.
+- **Supply risk is driven by Nb and V.** Nb has the highest EU score (4.4; about 93 % of mine output is Brazilian) and V the second (2.3). R5-4, the lightest finalist, is also the most Nb-rich and has the highest score of the four (2.10); R5-1 has the lowest (1.37). The mass-weighted scores of the 50 alloys span 1.31–2.50. The EU threshold applies to raw materials, not alloys; what matters is that every one of the 50 alloys contains W, Ta, Nb and V, all EU-critical, so no composition in this family avoids critical raw materials.
 - **Per volume the spread widens.** Dense W-Ta alloys cost more per kg *and* need more kg for the same part: the finalists differ 1.53× per kg but 1.74× per litre. Use $/L for a fixed component size.
 - **A cost-oriented candidate outside the finalists:** T6 (W32.2 Mo26.9 Ta5.5 Nb30.2 V5.2) is the cheapest single-phase alloy ($60/kg) with a 2688 °C solidus and 12.70 g/cm³, close to R5-13 on both. Its cost depends heavily on tungsten (38 % of its 2025 cost), so it shares the W price exposure.
 
@@ -62,7 +62,7 @@ Alloys not beaten on all three of solidus (higher), density (lower) and 2025 raw
 - One year of prices. Tungsten moved several-fold within 2026, and Ta and V prices have swung by tens of percent in past years (USGS five-year tables), so treat any ranking that depends on a few dollars per kg as unsettled.
 - The Nb price assumes a 65 % Nb ferroniobium grade; the Mo price is taken as per kg of contained Mo. Both are stated in the code so they can be changed.
 - No processing cost. Melting, homogenising and machining a refractory alloy usually cost more than its raw material; that is not modelled here.
-- The W, Mo and Ta figures were read from the USGS chapters directly; the Nb price from a search excerpt of the USGS Niobium chapter; the V price and the Nb and V producer shares from secondary summaries quoting the USGS chapters, because those PDFs could not be opened from this workspace. Check them against the chapters before citing externally.
+- The Nb and V prices and producer shares were checked against the USGS chapters in research run 2026-11-11. The W, Mo and Ta figures were read from the USGS chapters by the project; of these, only the Ta price was re-checked in that run (`docs/research/run-2026-11-11`).
 
 ## Sources
 

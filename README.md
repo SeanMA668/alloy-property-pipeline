@@ -77,7 +77,8 @@ strength checks: [`reports/finalists.md`](reports/finalists.md).
   WMoTaNbV. Only liquid and BCC form.
 - **Thermo-Calc's strength model fails validation.** Against the four measured
   room-temperature yield strengths, its ranking is wrong (Spearman ρ = −0.20): NbTaVW is
-  predicted at 787 MPa against 1530 MPa measured, and the others are 209–445 MPa too high.
+  predicted at 787 MPa against 1530 MPa measured (that measured value is not yet verified
+  against its primary paper), and the others are 209–445 MPa too high.
   The finalists' predicted values span only 163 MPa, so the model cannot rank them.
 
 - **The cross-family ML classifier ties the textbook rules.** Under cross-validation
@@ -99,8 +100,8 @@ strength checks: [`reports/finalists.md`](reports/finalists.md).
   <img src="data/calphad/hea_R5-1_isopleth.png" alt="Isopleth through R5-1, V 0-30 mol%" width="560">
 - **Cost and supply risk.** At 2025 raw-material prices, Ta content explains 98 % of the
   cost spread between single-phase alloys; at the October 2026 tungsten price the
-  low-W finalist becomes the cheapest. Every alloy in the family scores above the EU
-  supply-risk threshold ([`reports/cost_supply.md`](reports/cost_supply.md)).
+  low-W finalist becomes the cheapest. Every alloy in the family contains four
+  EU-critical raw materials (W, Ta, Nb, V) ([`reports/cost_supply.md`](reports/cost_supply.md)).
 
 ## Limitations
 
