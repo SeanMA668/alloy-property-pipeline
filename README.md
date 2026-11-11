@@ -71,7 +71,12 @@ Full list: [`reports/study_results.md`](reports/study_results.md).
   and the runs kept at the compositions actually calculated (`data/rounds/`).
 - **Composition pattern.** Single-phase alloys average 9.6 at.% V against 23.1 % for those
   that split, and contain more W and Ta. This is a pattern in these calculations, not a
-  tested rule.
+  tested rule. The surrogate's slopes agree: +1 at.% V lowers the solidus by 18 °C and
+  raises the split temperature by 9 °C ([`reports/sensitivity.md`](reports/sensitivity.md)).
+- **Cost and supply risk.** At 2025 raw-material prices, Ta content explains 98 % of the
+  cost spread between single-phase alloys; at the October 2026 tungsten price the
+  low-W finalist becomes the cheapest. Every alloy in the family scores above the EU
+  supply-risk threshold ([`reports/cost_supply.md`](reports/cost_supply.md)).
 
 ## Limitations
 
@@ -98,6 +103,8 @@ python -m pipeline.hea_properties # density + strength         -> reports/proper
 python -m pipeline.calphad_vs_ml # collect Thermo-Calc runs    -> data/calphad/calphad_vs_ml.csv
 python -m pipeline.study_results # study summary              -> reports/study_results.md
 python -m pipeline.figures       # README figures             -> reports/figures/
+python -m pipeline.sensitivity   # composition sensitivity    -> reports/sensitivity.md
+python -m pipeline.cost_supply   # cost + supply risk         -> reports/cost_supply.md
 pytest                           # tests
 ```
 
