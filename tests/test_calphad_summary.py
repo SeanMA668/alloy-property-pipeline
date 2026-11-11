@@ -59,3 +59,12 @@ def test_real_exports(alloy, solidus, split):
     assert s["solidus"] == pytest.approx(solidus)
     got = s["extra"].get("second BCC (A2)", (None,))[0]
     assert got == (pytest.approx(split) if split else None)
+
+
+def test_sweep_that_never_melts(tmp_path):
+    """A sweep that stops before any liquid forms must not crash and must be flagged."""
+    rows = [[500.0, 0.8, 0.2], [790.0, 1.0, 0.0], [800.0, 1.0, np.nan], [2276.0, 1.0, np.nan]]
+    s = summarise(write(tmp_path, rows, ["BCC_B2", "BCC_B2#2"]))
+    assert not s["melted"] and not s["complete"]
+    assert np.isnan(s["solidus"]) and s["t_max"] == 2276.0
+    assert s["extra"]["second BCC (A2)"][0] == 790.0
