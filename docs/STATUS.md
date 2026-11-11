@@ -26,6 +26,9 @@ Read this first when resuming work in a new session. Repo:
   (Simplified, 1400 °C, solid-solution only) fails validation: rank order vs the four
   measured alloys is wrong (ρ = −0.20); NbTaVW predicted 787 vs 1530 MPa measured; the
   others are 209–445 MPa high. Finalists span only 1528–1691 MPa, so it cannot rank them.
+- **Research run 2026-11-11** (4 agents, SIGN-OFF: PASS): MoNbTaV validation data is
+  as-cast, not annealed; all checked strengths are as-cast, so the 1400 °C anneal input
+  matches none; EU criticality needs SR ≥ 1.0 and EI ≥ 2.8; Nb and V prices verified.
 - **T6 Scheil:** 600 °C range, narrowest of all; liquid + BCC only. **L3** solidus 2281 °C,
   liquidus 2463 °C. **Isopleth through R5-1** (`data/calphad/hea_R5-1_isopleth.png`):
   single-phase to 500 °C up to ~11 % V (W balance); solidus at 6.4 % V matches the sweep.
@@ -50,8 +53,10 @@ Read this first when resuming work in a new session. Repo:
    Property Model "Uncertainty" type on R5-1 first).
 
 ## Still to do (Claude, no Thermo-Calc needed)
-- Verify the V price and Nb/V producer shares against the USGS chapter PDFs (read from
-  secondary summaries; see `reports/cost_supply.md`, Limits).
+- Find the full text of Yao et al., MSEA 674 (doi:10.1016/j.msea.2016.07.102) to verify
+  NbTaVW 1530 MPa; the largest strength-model error rests on it.
+- Next research run leads (`docs/research/run-2026-11-11/audit.md`): USGS Niobium
+  footnote may cite the 65 % Nb ferroniobium grade; check the W and Mo USGS figures.
 - Decide whether T6 joins the finalists (cheapest, narrowest Scheil range, solidus 2688 °C).
 - Optional: lattice parameters/elastic constants from an ML interatomic potential feeding a
   published physics-based strength model.
@@ -72,5 +77,5 @@ Read this first when resuming work in a new session. Repo:
 - Never commit the Materials Project API key; pass it only as `MP_API_KEY`.
 
 ## Branches
-- `main`: merged through PR #8 (cost-sensitivity).
-- `ys-validation`: L3 solidus, T6 Scheil, isopleth, strength-model validation (PR open).
+- `main`: merged through PR #10 (README).
+- `research-run-2026-11-11`: research run 2 and its corrections (PR #11 open).
