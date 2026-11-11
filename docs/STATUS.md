@@ -77,5 +77,5 @@ Read this first when resuming work in a new session. Repo:
 - Never commit the Materials Project API key; pass it only as `MP_API_KEY`.
 
 ## Branches
-- `main`: merged through PR #8 (cost-sensitivity).
-- `ys-validation`: L3 solidus, T6 Scheil, isopleth, strength-model validation (PR open).
+- `main`: merged through PR #10 (README).
+- `research-run-2026-11-11`: research run 2 and its corrections (PR #11 open).
