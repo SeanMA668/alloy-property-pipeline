@@ -16,7 +16,6 @@ The MPEA dataset (Borg et al. 2020) contains experimental phase reports for four
 **Reading:** Thermo-Calc never contradicts the experiments. For MoNbTaW and NbTaVW it predicts single-phase BCC at every temperature. For WMoTaNbV and MoNbTaV it predicts a split into two BCC phases only below 664–791 °C. Casting and typical high-temperature anneals happen above that, and diffusion in these alloys is slow at such low temperatures, so the experiments would not be expected to see the split. This test therefore confirms the high-temperature phase predictions; it cannot confirm or rule out the predicted low-temperature split, which would need long anneals below about 800 °C.
 
 Caveats: only four alloys, all equiatomic and all single-phase in experiment, so the test cannot show whether Thermo-Calc correctly predicts a *failure*. The anneal temperature for MoNbTaV is not recorded in the dataset.
-The MoNbTaV sweep stopped before melting, so its solidus is not available yet (the phase result below that temperature is unaffected).
 
 ## 2. How much do the finalists segregate when cast?
 
@@ -28,8 +27,38 @@ Equilibrium freezing assumes the solid stays fully mixed; Scheil assumes no diff
 | R5-2 (finalist) | 5.7 | 2886 | 125 | 656 |
 | R5-13 (finalist) | 5.9 | 2829 | 122 | 623 |
 | R5-4 (finalist) | 12.1 | 2643 | 144 | 732 |
+| T6 (cost candidate) | 5.2 | 2806 | 118 | 600 |
 | #1 | 19.1 | 2712 | 238 | 844 |
 | #3 | 14.6 | 2693 | 172 | 803 |
 | #5 | 20.0 | 2665 | 208 | 785 |
 
 **Reading:** the finalists freeze over 623–732 °C under Scheil, against 785–844 °C for the earlier candidates and equiatomic WMoTaNbV; equilibrium ranges are 122–144 °C against 172–238 °C. So the search that favoured high melting point also produced alloys that should segregate less. The finalists are also lower in V, which is consistent with V widening the freezing range in these calculations; this is an observation across seven alloys, not a tested rule. In the five Scheil runs added for this report (finalists and #5), the Thermo-Calc plots show only liquid + BCC; no other phase forms during solidification.
+
+T6, the cheapest single-phase alloy (`cost_supply.md`), has the narrowest Scheil range calculated so far (600 °C) and also forms only liquid + BCC, which strengthens the case for adding it to the finalists.
+
+## 3. Can Thermo-Calc's strength model rank the finalists?
+
+Yield Strength property model, Simplified mode, annealing temperature 1400 °C, solid-solution strengthening only (no grain-boundary or precipitation terms). Measured values are room-temperature compression tests from the MPEA dataset.
+
+| Alloy | Measured (MPa) | Thermo-Calc (MPa) | Error (MPa) |
+|---|---:|---:|---:|
+| WMoTaNbV (cast) | 1246 | 1691 | +445 |
+| MoNbTaW (cast; 996 in a second report) | 1058 | 1482 | +424 |
+| NbTaVW (cast) | 1530 | 787 | -743 |
+| MoNbTaV (annealed) | 1525 | 1734 | +209 |
+
+**Reading: it fails this test.** The rank order does not match (Spearman ρ = -0.20, n = 4). NbTaVW, the strongest alloy in experiments, is predicted the weakest, 743 MPa low. Without it the model overestimates every alloy, but by 209–445 MPa, a spread of 236 MPa that no single correction removes.
+
+Thermo-Calc's values for the finalists, for the record:
+
+| Alloy | Thermo-Calc yield strength (MPa) |
+|---|---:|
+| R5-1 | 1556 |
+| R5-2 | 1636 |
+| R5-13 | 1691 |
+| R5-4 | 1528 |
+| T6 | 1649 |
+
+They span only 163 MPa, less than the 236 MPa variation in the model's error even on the three alloys it gets in the right order. So these numbers cannot separate the finalists, and the project keeps its own strength estimate (`properties_results.md`, about 200 MPa error) as a tie-breaker only. Strength remains the least certain property in this study.
+
+Caveats: four alloys, all equiatomic; measured strengths depend on processing (cast vs annealed) and test, which the model does not represent.
