@@ -29,6 +29,9 @@ Read this first when resuming work in a new session. Repo:
 - **Research run 2026-11-11** (4 agents, SIGN-OFF: PASS): MoNbTaV validation data is
   as-cast, not annealed; all checked strengths are as-cast, so the 1400 °C anneal input
   matches none; EU criticality needs SR ≥ 1.0 and EI ≥ 2.8; Nb and V prices verified.
+- **EduPack comparison** (`reports/ashby.md`, chart in README): R5-1, R5-2, R5-13, T6 sit
+  between Mo/TZM and Ta/Ta-10W on melting point vs density; R5-4 is beaten by Mo/TZM on
+  those two axes. Finished-metal price mark-up: W, Mo ~1×, Ta ~2×, Nb ~3–3.6×.
 - **T6 Scheil:** 600 °C range, narrowest of all; liquid + BCC only. **L3** solidus 2281 °C,
   liquidus 2463 °C. **Isopleth through R5-1** (`data/calphad/hea_R5-1_isopleth.png`):
   single-phase to 500 °C up to ~11 % V (W balance); solidus at 6.4 % V matches the sweep.
@@ -43,12 +46,9 @@ Read this first when resuming work in a new session. Repo:
 | R5-4 | 17.2 | 24.4 | 35.0 | 12.1 | 11.3 | 2499 | 11.85 |
 
 ## Waiting on Sean (Thermo-Calc / Granta)
-1. **Granta EduPack table** (Level 3 or Aerospace): density, melting point/solidus, room-T
-   yield strength, max service temperature, price, for W, Mo, Ta, Nb, TZM, C-103, Ta-10W,
-   Inconel 718, CMSX-4. Export Table view to CSV/Excel.
-2. Optional: confirm `ys_L2` (NbTaVW) had solid-solution strengthening ticked; if it was
+1. Optional: confirm `ys_L2` (NbTaVW) had solid-solution strengthening ticked; if it was
    off, rerun. The conclusion holds either way (the other three already vary by 236 MPa).
-3. Later: **set D** (one round with W and Ta allowed up to ~45 %; generate with
+2. Later: **set D** (one round with W and Ta allowed up to ~45 %; generate with
    `study_design.py` after raising the cap) and **set C** (composition tolerance, try the
    Property Model "Uncertainty" type on R5-1 first).
 
@@ -60,8 +60,7 @@ Read this first when resuming work in a new session. Repo:
 - Decide whether T6 joins the finalists (cheapest, narrowest Scheil range, solidus 2688 °C).
 - Optional: lattice parameters/elastic constants from an ML interatomic potential feeding a
   published physics-based strength model.
-- Browser dashboard (GitHub Pages, greys out compositions far from data), Ashby chart with
-  Granta data, final report, poster in Figma, resume bullets.
+- Browser dashboard (GitHub Pages, greys out compositions far from data), final report, poster in Figma, resume bullets.
 
 ## Thermo-Calc rules that caused errors before
 - **Mole percent and Celsius** every time; the Property Model Calculator defaults to Mass
@@ -77,5 +76,5 @@ Read this first when resuming work in a new session. Repo:
 - Never commit the Materials Project API key; pass it only as `MP_API_KEY`.
 
 ## Branches
-- `main`: merged through PR #10 (README).
-- `research-run-2026-11-11`: research run 2 and its corrections (PR #11 open).
+- `main`: merged through PR #11 (research run 2026-11-11).
+- `edupack-ashby`: EduPack comparison chart (PR open).

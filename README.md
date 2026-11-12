@@ -64,6 +64,17 @@ A smaller Scheil range means less segregation in a casting. Full list:
 [`reports/study_results.md`](reports/study_results.md); validation, solidification and
 strength checks: [`reports/finalists.md`](reports/finalists.md).
 
+## How they compare with existing high-temperature metals
+
+![Melting point vs density, with EduPack reference materials](reports/figures/ashby_melting_density.png)
+
+Against Ansys Granta EduPack data for pure refractory metals, refractory alloys (TZM,
+C-103, Ta-10W) and Ni superalloys, four of the five candidates are calculated to sit in a
+gap: hotter than Mo alloys (about 2615 °C) and lighter than Ta alloys (16.5–16.9 g/cm³).
+Their calculated solidus is 1160–1560 °C above Inconel 718's melting range, at 1.4–1.8×
+its density. The lightest finalist, R5-4, is beaten by Mo and TZM on these two axes alone.
+Details and caveats: [`reports/ashby.md`](reports/ashby.md).
+
 ## Findings worth knowing
 
 - **Thermo-Calc agrees with experiments on phases.** All four W-Mo-Ta-Nb-V alloys with
@@ -134,6 +145,7 @@ python -m pipeline.figures       # README figures             -> reports/figures
 python -m pipeline.sensitivity   # composition sensitivity    -> reports/sensitivity.md
 python -m pipeline.cost_supply   # cost + supply risk         -> reports/cost_supply.md
 python -m pipeline.finalists     # validation, Scheil, strength -> reports/finalists.md
+python -m pipeline.ashby         # EduPack comparison chart -> reports/ashby.md
 pytest                           # tests
 ```
 

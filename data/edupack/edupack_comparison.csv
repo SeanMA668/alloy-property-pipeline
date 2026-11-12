@@ -1,0 +1,10 @@
+short,record,group,density_lo,density_hi,melt_lo_C,melt_hi_C,ys_lo_MPa,ys_hi_MPa,tmax_lo_C,tmax_hi_C,price_lo_usd_kg,price_hi_usd_kg
+W,"Tungsten, commercial purity, R07004, annealed",Refractory metal,19.3,19.4,3410,3420,1350,1680,825,1210,40.2,69.2
+Mo,"Molybdenum, 360 grade, fully recrystallized",Refractory metal,10.1,10.3,2610,2620,170,350,867,1310,48.5,48.5
+Ta,"Tantalum, commercial purity, R05200, cold worked",Refractory metal,16.5,16.7,2990,3000,345,1060,1370,1980,375,442
+Nb,"Niobium, commercial purity, Type 1 (reactor grade)",Refractory metal,8.6,8.7,2460,2470,75,95,547,737,127,145
+TZM,"Molybdenum, Alloy 363, TZM",Refractory alloy,10.1,10.3,2610,2620,770,950,867,1310,50.8,50.8
+C-103,"Niobium-Hf-Ti alloy, Alloy C-103, recrystallized",Refractory alloy,8.8,8.95,2340,2360,260,380,520,700,573,589
+Ta-10W,"Tantalum-tungsten alloy, Ta-10W",Refractory alloy,16.7,16.9,3030,3040,380,560,1370,2480,342,405
+Inconel 718,"Nickel-chromium alloy, INCONEL 718, solution treated",Ni superalloy,8.18,8.26,1260,1340,724,800,632,705,19,20.9
+CMSX-4,"Nickel-Co-Cr alloy, CMSX-4, as cast",Ni superalloy,8.7,8.7,,,900,1150,,,131,143
