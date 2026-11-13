@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>W-Mo-Ta-Nb-V alloy explorer</title>
+<style>
+  :root {
+    color-scheme: light;
+    --surface-0: #f4f3f0; --surface-1: #fcfcfb; --border: #e0dfda; --grid: #e6e5e1;
+    --text-primary: #0b0b0b; --text-secondary: #52514e; --text-muted: #8a8984;
+    --series-1: #2a78d6; --series-2: #eb6834; --accent: #2a78d6;
+    --warn-bg: #fff4e5; --warn-ink: #8a4b00;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      color-scheme: dark;
+      --surface-0: #121211; --surface-1: #1a1a19; --border: #33332f; --grid: #2c2c29;
+      --text-primary: #f0efec; --text-secondary: #c3c2b7; --text-muted: #8f8e86;
+      --series-1: #3987e5; --series-2: #d95926; --accent: #3987e5;
+      --warn-bg: #3a2a12; --warn-ink: #f2c27a;
+    }
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--surface-0); color: var(--text-primary);
+         font: 15px/1.45 system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; }
+  main { max-width: 1120px; margin: 0 auto; padding: 28px 20px 48px; }
+  h1 { font-size: 24px; margin: 0 0 6px; letter-spacing: -0.01em; }
+  .lede { color: var(--text-secondary); margin: 0 0 22px; max-width: 760px; }
+  a { color: var(--accent); }
+  .grid { display: grid; grid-template-columns: 330px 1fr; gap: 18px; }
+  @media (max-width: 860px) { .grid { grid-template-columns: 1fr; } }
+  .card { background: var(--surface-1); border: 1px solid var(--border); border-radius: 12px; padding: 16px 18px; }
+  .card h2 { font-size: 13px; text-transform: uppercase; letter-spacing: .06em; color: var(--text-muted); margin: 0 0 12px; font-weight: 600; }
+  .slider { display: grid; grid-template-columns: 34px 1fr 52px; align-items: center; gap: 10px; margin: 8px 0; }
+  .slider label { font-weight: 600; }
+  .slider output { text-align: right; font-variant-numeric: tabular-nums; color: var(--text-secondary); }
+  input[type=range] { width: 100%; accent-color: var(--accent); }
+  .balance { display: flex; justify-content: space-between; border-top: 1px solid var(--border); margin-top: 10px; padding-top: 10px; }
+  .balance b { font-variant-numeric: tabular-nums; }
+  .presets { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 14px; }
+  .presets button { font: inherit; font-size: 13px; padding: 4px 10px; border-radius: 999px; border: 1px solid var(--border);
+                    background: transparent; color: var(--text-primary); cursor: pointer; }
+  .presets button:hover, .presets button:focus-visible { border-color: var(--accent); outline: none; }
+  .presets .lbl { width: 100%; font-size: 12px; color: var(--text-muted); margin-top: 4px; }
+  .tiles { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 10px; }
+  .tile { border: 1px solid var(--border); border-radius: 10px; padding: 10px 12px; transition: opacity .15s; }
+  .tile .k { font-size: 12px; color: var(--text-muted); }
+  .tile .v { font-size: 22px; font-weight: 650; font-variant-numeric: tabular-nums; margin-top: 2px; }
+  .tile .s { font-size: 12px; color: var(--text-secondary); }
+  .faded .tile.gp { opacity: .38; }
+  .notice { display: none; margin: 0 0 10px; padding: 8px 12px; border-radius: 8px; background: var(--warn-bg); color: var(--warn-ink); font-size: 13.5px; }
+  .faded .notice { display: block; }
+  .chartwrap { position: relative; margin-top: 16px; }
+  svg text { fill: var(--text-secondary); font-size: 11.5px; }
+  svg text.lab { fill: var(--text-primary); font-weight: 600; paint-order: stroke; stroke: var(--surface-1); stroke-width: 4px; stroke-linejoin: round; }
+  .tile .v small { font-size: 14px; font-weight: 500; color: var(--text-secondary); }
+  .tip { position: absolute; pointer-events: none; background: var(--surface-1); border: 1px solid var(--border);
+         border-radius: 8px; padding: 6px 9px; font-size: 12.5px; box-shadow: 0 4px 14px rgba(0,0,0,.12); display: none; white-space: nowrap; }
+  .legend { display: flex; gap: 16px; font-size: 12.5px; color: var(--text-secondary); margin-top: 4px; flex-wrap: wrap; }
+  .legend i { display: inline-block; width: 10px; height: 10px; border-radius: 50%; margin-right: 6px; vertical-align: -1px; }
+  details { margin-top: 18px; }
+  summary { cursor: pointer; color: var(--text-secondary); }
+  table { border-collapse: collapse; width: 100%; font-size: 13px; margin-top: 8px; font-variant-numeric: tabular-nums; }
+  th, td { padding: 4px 8px; border-bottom: 1px solid var(--border); text-align: right; }
+  th:first-child, td:first-child { text-align: left; }
+  .foot { color: var(--text-muted); font-size: 12.5px; margin-top: 22px; max-width: 860px; }
+  .foot li { margin: 3px 0; }
+</style>
+</head>
+<body>
+<main>
+  <h1>W-Mo-Ta-Nb-V refractory alloy explorer</h1>
+  <p class="lede">Pick a composition and see what the project's models predict: solidus and phase stability from
+    Gaussian-process surrogates trained on 50 Thermo-Calc calculations, density by rule of mixtures, and yield
+    strength from the Maresca–Curtin model. Predictions far from the calculated alloys are greyed out.
+    <a href="https://github.com/SeanMA668/hea-alloy-property-pipeline">Code and reports on GitHub</a>.</p>
+
+  <div class="grid">
+    <section class="card" aria-label="Composition">
+      <h2>Composition (at.%)</h2>
+      <div id="sliders"></div>
+      <div class="balance"><span>W (balance)</span><b id="wbal">–</b></div>
+      <div class="presets" id="presets"></div>
+    </section>
+
+    <section class="card" id="results" aria-live="polite">
+      <h2>Predicted properties</h2>
+      <p class="notice" id="notice"></p>
+      <div class="tiles">
+        <div class="tile gp"><div class="k">Solidus</div><div class="v" id="t-sol">–</div><div class="s" id="t-sol-s"></div></div>
+        <div class="tile gp"><div class="k">Single-phase BCC to 500 °C</div><div class="v" id="t-p">–</div><div class="s" id="t-p-s"></div></div>
+        <div class="tile"><div class="k">Density</div><div class="v" id="t-rho">–</div><div class="s">rule of mixtures</div></div>
+        <div class="tile"><div class="k">Yield strength, 25 °C</div><div class="v" id="t-ys">–</div><div class="s" id="t-ys-s"></div></div>
+      </div>
+      <div class="chartwrap">
+        <svg id="chart" viewBox="0 0 720 360" width="100%" role="img" aria-label="Solidus vs density of the 50 calculated alloys, with the selected composition"></svg>
+        <div class="tip" id="tip"></div>
+        <div class="legend">
+          <span><i style="background:var(--series-1)"></i>Single-phase BCC to 500 °C (calculated)</span>
+          <span><i style="background:var(--series-2)"></i>Splits into two BCC phases (calculated)</span>
+          <span><i style="border:2px solid var(--text-primary);background:transparent"></i>Your composition (predicted)</span>
+        </div>
+      </div>
+      <details>
+        <summary>Table of the 50 calculated alloys</summary>
+        <table id="tbl"><thead><tr><th>Alloy</th><th>W</th><th>Mo</th><th>Ta</th><th>Nb</th><th>V</th><th>Solidus °C</th><th>Split °C</th><th>Density</th></tr></thead><tbody></tbody></table>
+      </details>
+    </section>
+  </div>
+
+  <ul class="foot">
+    <li>Everything here is calculated; none of these alloys has been made. Solidus and phase stability come from Thermo-Calc (TCHEA6) via the surrogate; leave-one-out errors are about 10 °C (solidus) and 26 °C (split temperature) inside the sampled region.</li>
+    <li>"Single-phase" is the surrogate's calibrated probability that the two-BCC split stays below 550 °C. Uncertainties are rescaled to match leave-one-out errors.</li>
+    <li>Strength: reduced Maresca–Curtin edge-dislocation model, elemental inputs, 10⁻³ s⁻¹. On four measured alloys its mean error is about 150 MPa; the 1300 °C value is a ranking aid, not a design number.</li>
+    <li>Greyed out: the composition is farther than 0.12 (fraction-space distance) from every calculated alloy, or the solidus uncertainty exceeds 60 °C.</li>
+  </ul>
+</main>
+
+<script src="model.js"></script>
+<script>
+let comp = {Mo: 20, Ta: 20, Nb: 20, V: 20};
+
+// ---- UI ----
+function buildSliders() {
+  const box = document.getElementById("sliders");
+  FREE.forEach(e => {
+    const row = document.createElement("div"); row.className = "slider";
+    row.innerHTML = `<label for="s-${e}">${e}</label><input id="s-${e}" type="range" min="0" max="60" step="0.5"><output id="o-${e}"></output>`;
+    box.appendChild(row);
+    row.querySelector("input").addEventListener("input", ev => setEl(e, +ev.target.value));
+  });
+}
+function setEl(e, val) {
+  const others = FREE.filter(k => k !== e).reduce((a, k) => a + comp[k], 0);
+  comp[e] = Math.min(val, 100 - others); update();
+}
+function setComp(c) { FREE.forEach(e => comp[e] = c[e]); update(); }
+
+function update() {
+  FREE.forEach(e => { document.getElementById("s-" + e).value = comp[e]; document.getElementById("o-" + e).textContent = comp[e].toFixed(1); });
+  const r = predict(comp);
+  document.getElementById("wbal").textContent = r.fc.W.toFixed(1);
+  const far = r.dmin > 0.12 || r.sol.sd > 60;
+  document.getElementById("results").classList.toggle("faded", far);
+  document.getElementById("notice").textContent = far
+    ? `Outside the calculated data (nearest calculated alloy ${r.dmin.toFixed(2)} away; solidus ±${r.sol.sd.toFixed(0)} °C). Surrogate values are unreliable here; density and strength do not depend on the surrogate.`
+    : "";
+  document.getElementById("t-sol").innerHTML = `${r.sol.mu.toFixed(0)} <small>°C</small>`;
+  document.getElementById("t-sol-s").textContent = `± ${r.sol.sd.toFixed(0)} °C (1σ)`;
+  document.getElementById("t-p").innerHTML = `${(100 * r.p).toFixed(0)} <small>%</small>`;
+  document.getElementById("t-p-s").textContent = r.sp.mu <= 505 ? "split predicted below 500 °C" : `split predicted at ${r.sp.mu.toFixed(0)} ± ${r.sp.sd.toFixed(0)} °C`;
+  document.getElementById("t-rho").innerHTML = `${r.rho.toFixed(2)} <small>g/cm³</small>`;
+  document.getElementById("t-ys").innerHTML = `${r.ys25.toFixed(0)} <small>MPa</small>`;
+  document.getElementById("t-ys-s").textContent = `${r.ys1300.toFixed(0)} MPa at 1300 °C`;
+  drawCursor(r);
+}
+
+// ---- chart: solidus vs density ----
+const W = 720, H = 360, M = {l: 56, r: 16, t: 14, b: 40};
+let sx, sy;
+function drawChart() {
+  const svg = document.getElementById("chart"), A = D.alloys;
+  const xs = A.map(a => a.density), ys = A.map(a => a.solidus);
+  const x0 = Math.floor(Math.min(...xs) - 0.5), x1 = Math.ceil(Math.max(...xs) + 0.5);
+  const y0 = Math.floor((Math.min(...ys) - 60) / 100) * 100, y1 = Math.ceil((Math.max(...ys) + 60) / 100) * 100;
+  sx = v => M.l + (v - x0) / (x1 - x0) * (W - M.l - M.r);
+  sy = v => H - M.b - (v - y0) / (y1 - y0) * (H - M.t - M.b);
+  let g = "";
+  for (let v = y0; v <= y1; v += 100) g += `<line x1="${M.l}" x2="${W - M.r}" y1="${sy(v)}" y2="${sy(v)}" stroke="var(--grid)"/><text x="${M.l - 8}" y="${sy(v) + 4}" text-anchor="end">${v}</text>`;
+  for (let v = x0; v <= x1; v += 1) g += `<text x="${sx(v)}" y="${H - M.b + 18}" text-anchor="middle">${v}</text>`;
+  g += `<text x="${(M.l + W - M.r) / 2}" y="${H - 4}" text-anchor="middle">Density (g/cm³)</text>`;
+  g += `<text transform="translate(14 ${(M.t + H - M.b) / 2}) rotate(-90)" text-anchor="middle">Solidus (°C)</text>`;
+  A.forEach((a, i) => {
+    const col = a.single ? "var(--series-1)" : "var(--series-2)";
+    g += `<circle class="pt" data-i="${i}" cx="${sx(a.density)}" cy="${sy(a.solidus)}" r="5" fill="${col}" stroke="var(--surface-1)" stroke-width="2"/>`;
+    g += `<circle class="hit" data-i="${i}" cx="${sx(a.density)}" cy="${sy(a.solidus)}" r="11" fill="transparent" style="cursor:pointer"/>`;
+  });
+  D.finalists.forEach(id => { const a = A.find(z => z.id === id); if (a) g += `<text class="lab" x="${sx(a.density) - 8}" y="${sy(a.solidus) - 9}" text-anchor="end">${id}</text>`; });
+  g += `<g id="cursor"><circle r="8" fill="none" stroke="var(--text-primary)" stroke-width="2"/></g>`;
+  svg.innerHTML = g;
+  const tip = document.getElementById("tip");
+  svg.querySelectorAll(".hit").forEach(el => {
+    const a = A[+el.dataset.i];
+    el.addEventListener("mouseenter", () => {
+      tip.innerHTML = `<b>${a.id}</b> &nbsp;W${a.W} Mo${a.Mo} Ta${a.Ta} Nb${a.Nb} V${a.V}<br>Solidus ${a.solidus.toFixed(0)} °C · ${a.density.toFixed(2)} g/cm³<br>${a.single ? "single-phase BCC to 500 °C" : "two BCC phases below " + a.split.toFixed(0) + " °C"}<br><span style="color:var(--text-muted)">click to load</span>`;
+      const box = svg.getBoundingClientRect(), k = box.width / W;
+      tip.style.left = Math.min(sx(a.density) * k + 12, box.width - 260) + "px"; tip.style.top = (sy(a.solidus) * k - 10) + "px"; tip.style.display = "block";
+    });
+    el.addEventListener("mouseleave", () => tip.style.display = "none");
+    el.addEventListener("click", () => setComp({Mo: a.Mo, Ta: a.Ta, Nb: a.Nb, V: a.V}));
+  });
+}
+function drawCursor(r) {
+  const c = document.querySelector("#cursor circle"); if (!c || !sx) return;
+  c.setAttribute("cx", sx(r.rho)); c.setAttribute("cy", sy(r.sol.mu));
+}
+
+function buildPresets() {
+  const box = document.getElementById("presets");
+  const add = (label, c) => { const b = document.createElement("button"); b.textContent = label; b.onclick = () => setComp(c); box.appendChild(b); };
+  const lbl = t => { const s = document.createElement("span"); s.className = "lbl"; s.textContent = t; box.appendChild(s); };
+  lbl("Finalists");
+  D.check.forEach(f => add(f.id, f));
+  lbl("Measured alloys");
+  add("WMoTaNbV", {Mo: 20, Ta: 20, Nb: 20, V: 20}); add("MoNbTaW", {Mo: 25, Ta: 25, Nb: 25, V: 0});
+  add("NbTaVW", {Mo: 0, Ta: 25, Nb: 25, V: 25}); add("MoNbTaV", {Mo: 25, Ta: 25, Nb: 25, V: 25});
+}
+function buildTable() {
+  const tb = document.querySelector("#tbl tbody");
+  D.alloys.forEach(a => {
+    const tr = document.createElement("tr");
+    tr.innerHTML = `<td>${a.id}</td>${ELS.map(e => `<td>${a[e]}</td>`).join("")}<td>${a.solidus.toFixed(0)}</td><td>${a.single ? "< 500" : a.split.toFixed(0)}</td><td>${a.density.toFixed(2)}</td>`;
+    tb.appendChild(tr);
+  });
+}
+
+fetch("data.json").then(r => r.json()).then(d => {
+  setData(d); buildSliders(); buildPresets(); buildTable(); drawChart();
+  setComp(D.check[0]);
+  // self-check against the Python pipeline (shown in the console only)
+  const rows = D.check.map(f => { const r = predict(f); return {id: f.id, solidus: [r.sol.mu.toFixed(1), f.solidus.toFixed(1)], ys25: [r.ys25.toFixed(1), f.ys25.toFixed(1)], density: [r.rho.toFixed(3), f.density.toFixed(3)]}; });
+  console.table(rows);
+});
+</script>
+</body>
+</html>

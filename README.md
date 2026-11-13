@@ -18,6 +18,11 @@ measured alloys with a third of the error of Thermo-Calc's built-in model.
 
 ![Solidus vs density for the 50 calculated alloys](reports/figures/melting_vs_density.png)
 
+**Try it:** the [interactive explorer](https://seanma668.github.io/hea-alloy-property-pipeline/)
+predicts solidus, phase stability, density and strength for any composition in the browser,
+using the same models as the pipeline, and greys out compositions far from the calculated
+alloys (`site/`, data from `python -m pipeline.dashboard`).
+
 ## How it works
 
 ```mermaid
@@ -105,6 +110,13 @@ Details and caveats: [`reports/ashby.md`](reports/ashby.md).
 
   <img src="reports/figures/strength_parity.png" alt="Predicted vs measured yield strength, Thermo-Calc and Maresca-Curtin" width="480">
 
+- **An ML interatomic potential tests the strength model's key assumption.** The
+  Maresca–Curtin model takes solute misfit volumes from Vegard's law. Relaxing 35 random
+  alloys with the MACE-MPA-0 universal potential shows V expanding these alloys more than
+  Vegard predicts, which would cut predicted strength of V-containing alloys by about 20 %.
+  Measured lattice parameters of four alloys do not favour the correction, so Vegard stays;
+  the finalist ranking is the same either way
+  ([`reports/mlip_strength.md`](reports/mlip_strength.md)).
 - **The cross-family ML classifier ties the textbook rules.** Under cross-validation
   grouped by chemical system, the Random Forest and the empirical δ/Ω/VEC rules both reach
   balanced accuracy 0.812 (AUC 0.89 for the forest). Within W-Mo-Ta-Nb-V its ranking
@@ -165,6 +177,8 @@ python -m pipeline.cost_supply   # cost + supply risk         -> reports/cost_su
 python -m pipeline.finalists     # validation, Scheil, strength -> reports/finalists.md
 python -m pipeline.ashby         # EduPack comparison chart -> reports/ashby.md
 python -m pipeline.strength_model # physics-based strength   -> reports/strength_model.md
+python -m pipeline.mlip_strength  # Vegard check with an ML potential -> reports/mlip_strength.md
+python -m pipeline.dashboard     # browser explorer data       -> site/data.json
 pytest                           # tests
 ```
 
@@ -181,6 +195,7 @@ data/       MPEA dataset, Thermo-Calc exports (data/calphad/), batch files (data
 reports/    generated reports and figures
 tests/      pytest suite (runs without Thermo-Calc or an API key)
 docs/       literature notes, fact-checked by a multi-agent review (docs/research/)
+site/       browser explorer, deployed to GitHub Pages
 ```
 
 ## Credits
