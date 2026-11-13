@@ -32,3 +32,9 @@ load are listed, not counted as support.
   raw materials, comparison with existing refractory alloys; checks of the cost and
   validation inputs. SIGN-OFF: PASS (28 defects fixed by the auditor). Its 12 corrections
   are applied in `pipeline/finalists.py` and `pipeline/cost_supply.py`.
+- `run-2026-11-13/`: check of the Maresca–Curtin strength model (equations, constants,
+  elemental inputs, temperature law, edge vs screw at room temperature) and of the NbTaVW
+  validation value, using the Yao et al. accepted manuscript supplied by the project owner
+  (`sean-sources.md`). SIGN-OFF: PASS (19 defects fixed by the auditor). Corrections applied
+  in `pipeline/strength_model.py`, `pipeline/finalists.py` and `README.md`; the published
+  temperature law remains unresolved but changes no conclusion.

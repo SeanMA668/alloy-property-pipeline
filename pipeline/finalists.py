@@ -38,15 +38,14 @@ EARLIER = {"#1", "#3", "#5"}
 
 # Yield Strength property model (Thermo-Calc 2026a, TCHEA6): Simplified mode, annealing
 # temperature 1400 C, solid-solution strengthening only, Single calculation, mole percent.
-# Measured values: MPEA dataset (Borg et al. 2020), compression, 25 C. Three are confirmed
-# as-cast in the primary sources; NbTaVW is recorded as cast but its paper has not been
-# read (docs/research/run-2026-11-11). None was annealed at 1400 C, so that input matches
+# Measured values: MPEA dataset (Borg et al. 2020), compression, 25 C. All four are confirmed
+# as-cast in the primary sources (NbTaVW in docs/research/run-2026-11-13). None was annealed at 1400 C, so that input matches
 # none of the specimens.
 YS_DIR = P.CALPHAD / "yield_strength"
 YS_MEASURED = [  # id, alloy, measured MPa, note
     ("5", "WMoTaNbV", 1246, "cast"),
     ("L1", "MoNbTaW", 1058, "cast; 996 in a second report"),
-    ("L2", "NbTaVW", 1530, "cast; value not verified against the primary source"),
+    ("L2", "NbTaVW", 1530, "as-cast; checked in Yao et al. 2016 Table 2"),
     ("L3", "MoNbTaV", 1525, "cast"),
 ]
 YS_FINALISTS = ["R5-1", "R5-2", "R5-13", "R5-4", "T6"]
@@ -193,11 +192,11 @@ def main():
           "tie-breaker only. Strength remains the least certain property in this study.\n",
           "A physics-based replacement (Maresca–Curtin edge-dislocation model, elemental inputs "
           "only) does much better on the same four alloys: see `strength_model.md`.\n",
-          "Caveats: four alloys, all equiatomic. Three measured strengths are confirmed "
-          "as-cast in their primary sources; NbTaVW is recorded as cast in the dataset, but its "
-          "paper has not been read, and the 1530 MPa value has not been verified against it. "
-          "The NbTaVW error (−743 MPa), the largest, rests on that unverified value. The "
-          "1400 °C annealing temperature used in the model matches none of the specimens. "
+          "Caveats: four alloys, calculated at nominal equiatomic compositions. All four "
+          "measured strengths are confirmed as-cast in their primary sources; the NbTaVW value "
+          "(1530 MPa) was checked in run-2026-11-13, which also found the tested NbTaVW ingot "
+          "was not equiatomic (Nb 28.5, Ta 29.7, V 20.7, W 21.2 at.% by EDX). The "
+"1400 °C annealing temperature used in the model matches none of the specimens. "
           "Measured strengths also depend on processing and test method, which the model "
           "does not represent (`docs/research/run-2026-11-11`).\n"]
     (P.REPORTS / "finalists.md").write_text("\n".join(L))

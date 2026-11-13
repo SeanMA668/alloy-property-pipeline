@@ -34,7 +34,14 @@ Read this first when resuming work in a new session. Repo:
   vs 455 for Thermo-Calc, ρ = 0.80 vs −0.20 (n = 4); NbTaVW 1425 vs 1530 measured. Finalists
   rank R5-1 > R5-2 > R5-13 > T6 > R5-4 at 25/1000/1300 °C; 140 MPa spread at 25 °C is below
   the model error. Results sit near the paper's τ/τ₀ = 0.5 regime switch (sensitivity in
-  report). Elemental inputs are handbook values, not yet checked against primary sources.
+  report).
+- **Research run 2026-11-13** (4 agents, SIGN-OFF: PASS): model equations match arXiv v3;
+  the published paper's temperature law is unresolved but the alternative changes the
+  predictions by +7 to +37 MPa, same ranking. Ta inputs were 0 K values, now 300 K. NbTaVW
+  1530 MPa confirmed as-cast from Yao et al. (OSTI accepted manuscript); the tested ingot was
+  Nb28.5 Ta29.7 V20.7 W21.2 (model 1259 MPa there). Room-temperature mechanism is contested
+  (Tsuru et al. 2024: screw kink migration in VNbMoTaW). Current numbers: mean error
+  154 MPa; finalists R5-1 > R5-2 > R5-13 > T6 > R5-4, 155 MPa spread at 25 °C.
 - **Research run 2026-11-11** (4 agents, SIGN-OFF: PASS): MoNbTaV validation data is
   as-cast, not annealed; all checked strengths are as-cast, so the 1400 °C anneal input
   matches none; EU criticality needs SR ≥ 1.0 and EI ≥ 2.8; Nb and V prices verified.
@@ -44,7 +51,7 @@ Read this first when resuming work in a new session. Repo:
 - **T6 Scheil:** 600 °C range, narrowest of all; liquid + BCC only. **L3** solidus 2281 °C,
   liquidus 2463 °C. **Isopleth through R5-1** (`data/calphad/hea_R5-1_isopleth.png`):
   single-phase to 500 °C up to ~11 % V (W balance); solidus at 6.4 % V matches the sweep.
-- Repo polish: package layout, README with figures, 32 tests, GitHub Actions CI.
+- Repo polish: package layout, README with figures, 33 tests, GitHub Actions CI.
 
 ## Finalists
 | Alloy | Mo | Ta | Nb | V | W | Solidus (°C) | Density (g/cm³) |
@@ -60,8 +67,6 @@ Read this first when resuming work in a new session. Repo:
    Property Model "Uncertainty" type on R5-1 first).
 
 ## Still to do (Claude, no Thermo-Calc needed)
-- Find the full text of Yao et al., MSEA 674 (doi:10.1016/j.msea.2016.07.102) to verify
-  NbTaVW 1530 MPa; the largest strength-model error rests on it.
 - Next research run leads (`docs/research/run-2026-11-11/audit.md`): USGS Niobium
   footnote may cite the 65 % Nb ferroniobium grade; check the W and Mo USGS figures.
 - Decide whether T6 joins the finalists (cheapest, narrowest Scheil range, solidus 2688 °C).
