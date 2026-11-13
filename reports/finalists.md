@@ -44,7 +44,7 @@ Yield Strength property model, Simplified mode, annealing temperature 1400 °C, 
 |---|---:|---:|---:|
 | WMoTaNbV (cast) | 1246 | 1691 | +445 |
 | MoNbTaW (cast; 996 in a second report) | 1058 | 1482 | +424 |
-| NbTaVW (cast; value not verified against the primary source) | 1530 | 787 | -743 |
+| NbTaVW (as-cast; checked in Yao et al. 2016 Table 2) | 1530 | 787 | -743 |
 | MoNbTaV (cast) | 1525 | 1734 | +209 |
 
 **Reading: it fails this test.** The rank order does not match (Spearman ρ = -0.20, n = 4). NbTaVW, the strongest alloy in experiments, is predicted the weakest, 743 MPa low. Without it the model overestimates every alloy, but by 209–445 MPa, a spread of 236 MPa that no single correction removes.
@@ -63,4 +63,4 @@ They span only 163 MPa, less than the 236 MPa variation in the model's error eve
 
 A physics-based replacement (Maresca–Curtin edge-dislocation model, elemental inputs only) does much better on the same four alloys: see `strength_model.md`.
 
-Caveats: four alloys, all equiatomic. Three measured strengths are confirmed as-cast in their primary sources; NbTaVW is recorded as cast in the dataset, but its paper has not been read, and the 1530 MPa value has not been verified against it. The NbTaVW error (−743 MPa), the largest, rests on that unverified value. The 1400 °C annealing temperature used in the model matches none of the specimens. Measured strengths also depend on processing and test method, which the model does not represent (`docs/research/run-2026-11-11`).
+Caveats: four alloys, calculated at nominal equiatomic compositions. All four measured strengths are confirmed as-cast in their primary sources; the NbTaVW value (1530 MPa) was checked in run-2026-11-13, which also found the tested NbTaVW ingot was not equiatomic (Nb 28.5, Ta 29.7, V 20.7, W 21.2 at.% by EDX). The 1400 °C annealing temperature used in the model matches none of the specimens. Measured strengths also depend on processing and test method, which the model does not represent (`docs/research/run-2026-11-11`).

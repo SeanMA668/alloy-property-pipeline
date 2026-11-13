@@ -13,7 +13,7 @@ rounds, the surrogate predicted each new round's solidus to within **8–28 °C*
 average, where guessing the average would miss by 148–241 °C. Thermo-Calc's phase
 predictions agree with all four alloys in this family that have experimentally reported
 phases, and the finalists are predicted to segregate less on casting than earlier
-candidates. For strength, a physics-based model with no fitted parameters predicts four
+candidates. For strength, a physics-based model with nothing fitted to measured data predicts four
 measured alloys with a third of the error of Thermo-Calc's built-in model.
 
 ![Solidus vs density for the 50 calculated alloys](reports/figures/melting_vs_density.png)
@@ -93,11 +93,15 @@ Details and caveats: [`reports/ashby.md`](reports/ashby.md).
   and the others are 209–445 MPa too high. Rerunning with different settings reproduced
   the same values, so this is the model, not the setup. The Maresca–Curtin
   edge-dislocation model, built from elemental lattice parameters and elastic constants
-  with nothing fitted, gets every alloy within about 210 MPa (mean error 153 vs 455 MPa)
-  and NbTaVW within 105 MPa ([`reports/strength_model.md`](reports/strength_model.md)).
-  It ranks the finalists R5-1 > R5-2 > R5-13 > T6 > R5-4 at 25, 1000 and 1300 °C, though at
-  room temperature their 140 MPa spread is within the model's error. Four alloys is a small
-  test, and the NbTaVW measurement is not yet verified against its primary paper.
+  with nothing fitted to measured data, gets every alloy within about 215 MPa (mean error
+  154 vs 455 MPa) and NbTaVW within about 110 MPa at its nominal composition
+  ([`reports/strength_model.md`](reports/strength_model.md)). It ranks the finalists
+  R5-1 > R5-2 > R5-13 > T6 > R5-4 at 25, 1000 and 1300 °C, though at room temperature their
+  155 MPa spread is about the size of the model's error. Four alloys is a small test; the
+  NbTaVW value (1530 MPa, as-cast) is now checked against its primary paper, which also
+  shows the tested ingot was not equiatomic (at its measured composition the model gives
+  about 1260 MPa). A four-agent literature check of the model passed
+  ([`docs/research/run-2026-11-13`](docs/research/run-2026-11-13/notes.md)).
 
   <img src="reports/figures/strength_parity.png" alt="Predicted vs measured yield strength, Thermo-Calc and Maresca-Curtin" width="480">
 
@@ -129,10 +133,13 @@ Details and caveats: [`reports/ashby.md`](reports/ashby.md).
   predictions agree with the four experimental alloys above, but none of the finalists
   has been made.
 - **Strength is the weakest property.** The physics-based model is validated on only four
-  equiatomic, as-cast alloys at room temperature; its high-temperature values rank alloys
-  but are not validated, and its errors (up to ~210 MPa) exceed the room-temperature
-  differences between finalists. The ML strength model has a 202 MPa error on unseen
-  alloy families; Thermo-Calc's model failed validation.
+  as-cast alloys at room temperature, using nominal equiatomic compositions; its
+  high-temperature values rank alloys but are not validated, and its errors (up to ~215 MPa)
+  are as large as the room-temperature differences between finalists. It covers edge
+  dislocations only, and a 2024 study finds screw dislocations rate-controlling at room
+  temperature in VNbMoTaW, so the room-temperature agreement does not show the mechanism
+  is right. The ML strength model has a 202 MPa error on unseen alloy families;
+  Thermo-Calc's model failed validation.
 - **Cost** uses 2025 raw-material prices (ore, oxide, ferroalloy), not high-purity metal,
   and tungsten's price moved several-fold during 2026.
 - **Density** is a rule-of-mixtures estimate (median error 0.3 % on 31 measured alloys).
