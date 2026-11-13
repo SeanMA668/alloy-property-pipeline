@@ -13,7 +13,8 @@ rounds, the surrogate predicted each new round's solidus to within **8–28 °C*
 average, where guessing the average would miss by 148–241 °C. Thermo-Calc's phase
 predictions agree with all four alloys in this family that have experimentally reported
 phases, and the finalists are predicted to segregate less on casting than earlier
-candidates.
+candidates. For strength, a physics-based model with no fitted parameters predicts four
+measured alloys with a third of the error of Thermo-Calc's built-in model.
 
 ![Solidus vs density for the 50 calculated alloys](reports/figures/melting_vs_density.png)
 
@@ -86,11 +87,19 @@ Details and caveats: [`reports/ashby.md`](reports/ashby.md).
 - **The finalists should segregate less.** Under Scheil (no diffusion in the solid) they
   freeze over 600–732 °C, against 785–844 °C for earlier candidates and equiatomic
   WMoTaNbV. Only liquid and BCC form.
-- **Thermo-Calc's strength model fails validation.** Against the four measured
-  room-temperature yield strengths, its ranking is wrong (Spearman ρ = −0.20): NbTaVW is
-  predicted at 787 MPa against 1530 MPa measured (that measured value is not yet verified
-  against its primary paper), and the others are 209–445 MPa too high.
-  The finalists' predicted values span only 163 MPa, so the model cannot rank them.
+- **Thermo-Calc's strength model fails validation; a physics-based model replaces it.**
+  Against the four measured room-temperature yield strengths, Thermo-Calc's ranking is
+  wrong (Spearman ρ = −0.20): NbTaVW is predicted at 787 MPa against 1530 MPa measured,
+  and the others are 209–445 MPa too high. Rerunning with different settings reproduced
+  the same values, so this is the model, not the setup. The Maresca–Curtin
+  edge-dislocation model, built from elemental lattice parameters and elastic constants
+  with nothing fitted, gets every alloy within about 210 MPa (mean error 153 vs 455 MPa)
+  and NbTaVW within 105 MPa ([`reports/strength_model.md`](reports/strength_model.md)).
+  It ranks the finalists R5-1 > R5-2 > R5-13 > T6 > R5-4 at 25, 1000 and 1300 °C, though at
+  room temperature their 140 MPa spread is within the model's error. Four alloys is a small
+  test, and the NbTaVW measurement is not yet verified against its primary paper.
+
+  <img src="reports/figures/strength_parity.png" alt="Predicted vs measured yield strength, Thermo-Calc and Maresca-Curtin" width="480">
 
 - **The cross-family ML classifier ties the textbook rules.** Under cross-validation
   grouped by chemical system, the Random Forest and the empirical δ/Ω/VEC rules both reach
@@ -119,9 +128,11 @@ Details and caveats: [`reports/ashby.md`](reports/ashby.md).
 - **Calculated, not measured.** Every result is a TCHEA6 calculation. The phase
   predictions agree with the four experimental alloys above, but none of the finalists
   has been made.
-- **Strength is the weakest property.** The project's own model has a 202 MPa error on
-  unseen alloy families, larger than the differences between candidates, so it only
-  breaks ties; Thermo-Calc's model failed the validation above.
+- **Strength is the weakest property.** The physics-based model is validated on only four
+  equiatomic, as-cast alloys at room temperature; its high-temperature values rank alloys
+  but are not validated, and its errors (up to ~210 MPa) exceed the room-temperature
+  differences between finalists. The ML strength model has a 202 MPa error on unseen
+  alloy families; Thermo-Calc's model failed validation.
 - **Cost** uses 2025 raw-material prices (ore, oxide, ferroalloy), not high-purity metal,
   and tungsten's price moved several-fold during 2026.
 - **Density** is a rule-of-mixtures estimate (median error 0.3 % on 31 measured alloys).
@@ -146,6 +157,7 @@ python -m pipeline.sensitivity   # composition sensitivity    -> reports/sensiti
 python -m pipeline.cost_supply   # cost + supply risk         -> reports/cost_supply.md
 python -m pipeline.finalists     # validation, Scheil, strength -> reports/finalists.md
 python -m pipeline.ashby         # EduPack comparison chart -> reports/ashby.md
+python -m pipeline.strength_model # physics-based strength   -> reports/strength_model.md
 pytest                           # tests
 ```
 

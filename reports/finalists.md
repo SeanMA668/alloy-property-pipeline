@@ -61,4 +61,6 @@ Thermo-Calc's values for the finalists, for the record:
 
 They span only 163 MPa, less than the 236 MPa variation in the model's error even on the three alloys it gets in the right order. So these numbers cannot separate the finalists, and the project keeps its own strength estimate (`properties_results.md`, about 200 MPa error) as a tie-breaker only. Strength remains the least certain property in this study.
 
+A physics-based replacement (Maresca–Curtin edge-dislocation model, elemental inputs only) does much better on the same four alloys: see `strength_model.md`.
+
 Caveats: four alloys, all equiatomic. Three measured strengths are confirmed as-cast in their primary sources; NbTaVW is recorded as cast in the dataset, but its paper has not been read, and the 1530 MPa value has not been verified against it. The NbTaVW error (−743 MPa), the largest, rests on that unverified value. The 1400 °C annealing temperature used in the model matches none of the specimens. Measured strengths also depend on processing and test method, which the model does not represent (`docs/research/run-2026-11-11`).

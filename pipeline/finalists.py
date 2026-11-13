@@ -191,6 +191,8 @@ def main():
           "order. So these numbers cannot separate the finalists, and the project keeps its "
           "own strength estimate (`properties_results.md`, about 200 MPa error) as a "
           "tie-breaker only. Strength remains the least certain property in this study.\n",
+          "A physics-based replacement (Maresca–Curtin edge-dislocation model, elemental inputs "
+          "only) does much better on the same four alloys: see `strength_model.md`.\n",
           "Caveats: four alloys, all equiatomic. Three measured strengths are confirmed "
           "as-cast in their primary sources; NbTaVW is recorded as cast in the dataset, but its "
           "paper has not been read, and the 1530 MPa value has not been verified against it. "
