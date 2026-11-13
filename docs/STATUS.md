@@ -50,7 +50,8 @@ Read this first when resuming work in a new session. Repo:
 - **Dashboard** (`site/`, `pipeline/dashboard.py`): static explorer with the GP surrogates,
   strength and density in JavaScript (tested against Python); deploys to GitHub Pages via
   `.github/workflows/pages.yml` once Pages is enabled with source "GitHub Actions".
-- **Final report** (Claude Docs) and **poster** (Figma, 36×24 in): see links in the report.
+- **Final report:** https://claude.ai/artifact/YUsUYCWdokF5CYQqNYBQwC (includes resume bullets).
+  **Poster** (36×24 in): https://www.figma.com/design/dXpIlepDqUU7DPYRh0stCz
 - **Research run 2026-11-11** (4 agents, SIGN-OFF: PASS): MoNbTaV validation data is
   as-cast, not annealed; all checked strengths are as-cast, so the 1400 °C anneal input
   matches none; EU criticality needs SR ≥ 1.0 and EI ≥ 2.8; Nb and V prices verified.
@@ -96,5 +97,5 @@ Read this first when resuming work in a new session. Repo:
 - Never commit the Materials Project API key; pass it only as `MP_API_KEY`.
 
 ## Branches
-- `main`: merged through PR #13 (strength model).
-- `research-run-2026-11-13`: research run + corrections (PR #14 open).
+- `main`: merged through PR #14 (research run 2026-11-13).
+- `mlip-strength`: dashboard + ML-potential check (PR #15 open).
