@@ -30,11 +30,10 @@ Read this first when resuming work in a new session. Repo:
   strengthening confirmed on; all four validation alloys reproduced the earlier values
   within 1 MPa (NbTaVW 787 MPa). The finalists were not rerun; their old values stand.
 - **Physics-based strength model** (`pipeline/strength_model.py`, `reports/strength_model.md`):
-  Maresca–Curtin reduced edge model, elemental inputs only. Validation: mean error 153 MPa
-  vs 455 for Thermo-Calc, ρ = 0.80 vs −0.20 (n = 4); NbTaVW 1425 vs 1530 measured. Finalists
-  rank R5-1 > R5-2 > R5-13 > T6 > R5-4 at 25/1000/1300 °C; 140 MPa spread at 25 °C is below
-  the model error. Results sit near the paper's τ/τ₀ = 0.5 regime switch (sensitivity in
-  report).
+  Maresca–Curtin reduced edge model, elemental inputs only, nothing fitted to measured data.
+  Validation (after run 2026-11-13 corrections): mean error 154 MPa vs 455 for Thermo-Calc,
+  ρ = 0.80 vs −0.20 (n = 4); NbTaVW 1422 vs 1530 measured at nominal composition. At room
+  temperature the alloys sit at τ/τ₀ ≈ 0.70–0.73 (low-temperature branch, not near the switch).
 - **Research run 2026-11-13** (4 agents, SIGN-OFF: PASS): model equations match arXiv v3;
   the published paper's temperature law is unresolved but the alternative changes the
   predictions by +7 to +37 MPa, same ranking. Ta inputs were 0 K values, now 300 K. NbTaVW
@@ -90,5 +89,5 @@ Read this first when resuming work in a new session. Repo:
 - Never commit the Materials Project API key; pass it only as `MP_API_KEY`.
 
 ## Branches
-- `main`: merged through PR #11 (research run 2026-11-11).
-- `edupack-ashby`: EduPack comparison chart (PR open).
+- `main`: merged through PR #13 (strength model).
+- `research-run-2026-11-13`: research run + corrections (PR #14 open).
