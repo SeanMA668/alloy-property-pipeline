@@ -1,4 +1,4 @@
-# Project status and handoff (2026-11-11)
+# Project status and handoff (2026-11-13)
 
 Read this first when resuming work in a new session. Repo:
 `SeanMA668/hea-alloy-property-pipeline`; see `README.md` for what the project is.
@@ -26,6 +26,15 @@ Read this first when resuming work in a new session. Repo:
   (Simplified, 1400 °C, solid-solution only) fails validation: rank order vs the four
   measured alloys is wrong (ρ = −0.20); NbTaVW predicted 787 vs 1530 MPa measured; the
   others are 209–445 MPa high. Finalists span only 1528–1691 MPa, so it cannot rank them.
+- **Thermo-Calc strength rerun (2026-11-13):** Advanced mode, 1000 °C anneal, solid-solution
+  strengthening confirmed on; all four validation alloys reproduced the earlier values
+  within 1 MPa (NbTaVW 787 MPa). The finalists were not rerun; their old values stand.
+- **Physics-based strength model** (`pipeline/strength_model.py`, `reports/strength_model.md`):
+  Maresca–Curtin reduced edge model, elemental inputs only. Validation: mean error 153 MPa
+  vs 455 for Thermo-Calc, ρ = 0.80 vs −0.20 (n = 4); NbTaVW 1425 vs 1530 measured. Finalists
+  rank R5-1 > R5-2 > R5-13 > T6 > R5-4 at 25/1000/1300 °C; 140 MPa spread at 25 °C is below
+  the model error. Results sit near the paper's τ/τ₀ = 0.5 regime switch (sensitivity in
+  report). Elemental inputs are handbook values, not yet checked against primary sources.
 - **Research run 2026-11-11** (4 agents, SIGN-OFF: PASS): MoNbTaV validation data is
   as-cast, not annealed; all checked strengths are as-cast, so the 1400 °C anneal input
   matches none; EU criticality needs SR ≥ 1.0 and EI ≥ 2.8; Nb and V prices verified.
@@ -35,7 +44,7 @@ Read this first when resuming work in a new session. Repo:
 - **T6 Scheil:** 600 °C range, narrowest of all; liquid + BCC only. **L3** solidus 2281 °C,
   liquidus 2463 °C. **Isopleth through R5-1** (`data/calphad/hea_R5-1_isopleth.png`):
   single-phase to 500 °C up to ~11 % V (W balance); solidus at 6.4 % V matches the sweep.
-- Repo polish: package layout, README with figures, 27 tests, GitHub Actions CI.
+- Repo polish: package layout, README with figures, 32 tests, GitHub Actions CI.
 
 ## Finalists
 | Alloy | Mo | Ta | Nb | V | W | Solidus (°C) | Density (g/cm³) |
@@ -46,9 +55,7 @@ Read this first when resuming work in a new session. Repo:
 | R5-4 | 17.2 | 24.4 | 35.0 | 12.1 | 11.3 | 2499 | 11.85 |
 
 ## Waiting on Sean (Thermo-Calc / Granta)
-1. Optional: confirm `ys_L2` (NbTaVW) had solid-solution strengthening ticked; if it was
-   off, rerun. The conclusion holds either way (the other three already vary by 236 MPa).
-2. Later: **set D** (one round with W and Ta allowed up to ~45 %; generate with
+1. Later: **set D** (one round with W and Ta allowed up to ~45 %; generate with
    `study_design.py` after raising the cap) and **set C** (composition tolerance, try the
    Property Model "Uncertainty" type on R5-1 first).
 
@@ -67,9 +74,11 @@ Read this first when resuming work in a new session. Repo:
   percent and Kelvin (round 2 was entered in mass % by mistake).
 - Thermo-Calc's composition fields are in the order **Mo, Ta, Nb, V, with W as balance**.
   Give tables in that order (round 3 was shifted one element over).
-- The **Property Model Calculator uses Mo as balance**, with fields W, Ta, Nb, V. Type the W
-  value in the W box and check the greyed Mo value (the first finalist YS runs had W and Mo
-  swapped).
+- The **Property Model Calculator's balance element depends on the tree**: the old tree used
+  Mo as balance (fields W, Ta, Nb, V; the first finalist YS runs had W and Mo swapped); the
+  2026-11-13 tree uses W as balance (fields Mo, Ta, Nb, V). Always check which box is greyed,
+  and check the exported column headers name the intended elements (one 2026-11-13 run
+  came back as MoTaVW instead of MoNbTaV).
 - Sweep 500–3000 °C; export CSV + PNG with the axis in °C; name files `hea_<ID>.csv/.png`
   (Scheil: `hea_<ID>_scheil`). Plots for #1–#5, T1–T9, R2-*m may still have kelvin axes.
 - No HEA mobility database (MOBHEA), so Homogenization/Diffusion cannot be used.
