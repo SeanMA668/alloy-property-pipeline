@@ -41,6 +41,17 @@ Read this first when resuming work in a new session. Repo:
   Nb28.5 Ta29.7 V20.7 W21.2 (model 1259 MPa there). Room-temperature mechanism is contested
   (Tsuru et al. 2024: screw kink migration in VNbMoTaW). Current numbers: mean error
   154 MPa; finalists R5-1 > R5-2 > R5-13 > T6 > R5-4, 155 MPa spread at 25 °C.
+- **ML-potential check** (`pipeline/mlip_volumes.py`, `pipeline/mlip_strength.py`,
+  `reports/mlip_strength.md`): MACE-MPA-0 volumes of 35 random alloys + 5 elements. V pair
+  terms all positive (alloys expand with V beyond Vegard); correcting misfits lowers
+  V-alloy strength 20–23 % and raises validation error 154 → 303 MPa; measured lattice
+  parameters (4 alloys) do not favour it, so Vegard kept. MLIP C44 for Ta, Nb, V far off
+  (Nb negative), so experimental elastic constants kept. Finalist ranking unchanged.
+- **Dashboard** (`site/`, `pipeline/dashboard.py`): static explorer with the GP surrogates,
+  strength and density in JavaScript (tested against Python); deploys to GitHub Pages via
+  `.github/workflows/pages.yml` once Pages is enabled with source "GitHub Actions".
+- **Final report:** https://claude.ai/artifact/YUsUYCWdokF5CYQqNYBQwC (includes resume bullets).
+  **Poster** (36×24 in): https://www.figma.com/design/dXpIlepDqUU7DPYRh0stCz
 - **Research run 2026-11-11** (4 agents, SIGN-OFF: PASS): MoNbTaV validation data is
   as-cast, not annealed; all checked strengths are as-cast, so the 1400 °C anneal input
   matches none; EU criticality needs SR ≥ 1.0 and EI ≥ 2.8; Nb and V prices verified.
@@ -50,7 +61,7 @@ Read this first when resuming work in a new session. Repo:
 - **T6 Scheil:** 600 °C range, narrowest of all; liquid + BCC only. **L3** solidus 2281 °C,
   liquidus 2463 °C. **Isopleth through R5-1** (`data/calphad/hea_R5-1_isopleth.png`):
   single-phase to 500 °C up to ~11 % V (W balance); solidus at 6.4 % V matches the sweep.
-- Repo polish: package layout, README with figures, 33 tests, GitHub Actions CI.
+- Repo polish: package layout, README with figures, 37 tests, GitHub Actions CI.
 
 ## Finalists
 | Alloy | Mo | Ta | Nb | V | W | Solidus (°C) | Density (g/cm³) |
@@ -69,9 +80,6 @@ Read this first when resuming work in a new session. Repo:
 - Next research run leads (`docs/research/run-2026-11-11/audit.md`): USGS Niobium
   footnote may cite the 65 % Nb ferroniobium grade; check the W and Mo USGS figures.
 - Decide whether T6 joins the finalists (cheapest, narrowest Scheil range, solidus 2688 °C).
-- Optional: lattice parameters/elastic constants from an ML interatomic potential feeding a
-  published physics-based strength model.
-- Browser dashboard (GitHub Pages, greys out compositions far from data), final report, poster in Figma, resume bullets.
 
 ## Thermo-Calc rules that caused errors before
 - **Mole percent and Celsius** every time; the Property Model Calculator defaults to Mass
@@ -89,5 +97,5 @@ Read this first when resuming work in a new session. Repo:
 - Never commit the Materials Project API key; pass it only as `MP_API_KEY`.
 
 ## Branches
-- `main`: merged through PR #13 (strength model).
-- `research-run-2026-11-13`: research run + corrections (PR #14 open).
+- `main`: merged through PR #14 (research run 2026-11-13).
+- `mlip-strength`: dashboard + ML-potential check (PR #15 open).
